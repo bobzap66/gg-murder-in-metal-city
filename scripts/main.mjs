@@ -37,4 +37,5 @@ Hooks.once("ready",()=>{
       return dashboard.render({force:true});
     }
   });
+  if(game.user?.isGM)void repairGMShortcutIcons().catch(error=>console.error(MODULE_ID,"Shortcut icon repair failed",error));
 });
