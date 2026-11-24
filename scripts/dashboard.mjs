@@ -1,3 +1,4 @@
+import {disableContentActions} from "./window-busy.mjs";
 import {openChaseDirector} from "../features/chase/director.mjs";
 import {openEvidenceManager} from "../features/investigation/library.mjs";
 import {openCourtRoster} from "../features/courtroom/roster.mjs";
@@ -96,10 +97,10 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
     requireGM();
     if(this._busy)return;
     this._busy=true;
-    for(const button of this.element?.querySelectorAll("button")??[])button.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await action();}
     catch(err){console.error(MODULE_ID,err);ui.notifications.error(err.message??String(err));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async importAction(event,target) {
     await this.run(async()=>{

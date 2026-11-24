@@ -13,4 +13,5 @@
 - Courtroom cast controls: three adjustable image-tile stations, native asset picker, world actor artwork selection, mirror, spotlight and dismissal without modifying actors.
 - Chase Director with eight obstacle covers, manual chase-point targets and adjustments, independent party/drone movement, round tracking, persistent scene state and overlay repair.
 - Versioned development manifest channel and automated publication after passing main builds; stable releases remain draft-only.
+- Fix native Foundry window close/menu controls remaining disabled after module operations; scope busy state to content actions and restore prior button state in every GM panel.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

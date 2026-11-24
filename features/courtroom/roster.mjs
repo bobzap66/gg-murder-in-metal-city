@@ -1,3 +1,4 @@
+import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT} from "../../scripts/features.mjs";
 import {PROFILES,GUIDE_ID,journalData,missingProfiles} from "./profiles.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
@@ -38,9 +39,9 @@ class CourtRoster extends HandlebarsApplicationMixin(ApplicationV2){
   async run(fn){
     requireGM();if(this._busy)return;
     this._busy=true;
-    for(const b of this.element?.querySelectorAll("button")??[])b.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await fn();}catch(e){console.error(MODULE_ID,e);ui.notifications.error(e.message??String(e));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async importAction(){await this.run(async()=>{const docs=await importCourtJournals();ui.notifications.info(docs.length?"Imported "+docs.length+" GM journals.":"All court journals already exist.");});}
   static async openAction(event,target){await this.run(()=>openCourtJournal(target.dataset.profile));}

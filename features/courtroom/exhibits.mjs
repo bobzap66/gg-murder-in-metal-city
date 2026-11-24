@@ -1,3 +1,4 @@
+import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {availableEvidence,openEvidenceManager,exclusive as evidenceOperation} from "../investigation/library.mjs";
 import {RECORD,PLACEMENT,safeImage,rectPixels,fitImage,placementDocs} from "../investigation/records.mjs";
@@ -112,9 +113,9 @@ class ExhibitDirector extends HandlebarsApplicationMixin(ApplicationV2){
   }
   async run(fn){
     requireGM();if(this._busy)return;this._busy=true;
-    for(const b of this.element.querySelectorAll("button"))b.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await fn();}catch(e){console.error(MODULE_ID,e);ui.notifications.error(e.message??String(e));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async presentAction(){await this.run(()=>presentExhibit(this.sceneId,this._selected,{lighting:this._lighting}));}
   static async clearAction(){await this.run(()=>clear(this.sceneId));}

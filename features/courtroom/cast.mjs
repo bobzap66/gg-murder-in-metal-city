@@ -1,3 +1,4 @@
+import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {STATIONS,stationById,normalizeCast,stationTiles,stationForm,castTileData} from "./cast-layout.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
@@ -80,19 +81,19 @@ class CourtCast extends HandlebarsApplicationMixin(ApplicationV2){
   async run(fn){
     requireGM();if(this._busy)return;
     this._busy=true;
-    for(const b of this.element.querySelectorAll("button"))b.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await fn();}catch(e){console.error(MODULE_ID,e);ui.notifications.error(e.message??String(e));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async selectAction(event,target){await this.run(async()=>{this._station=stationById(target.dataset.station).id;});}
   static async placeAction(){
     const raw={name:this.value("name"),image:this.value("image"),center:this.value("center"),baseline:this.value("baseline"),height:this.value("height"),mirror:!!this.field("mirror")?.checked};
     // Keep form input on validation errors so the GM can correct it.
     requireGM();if(this._busy)return;this._busy=true;
-    for(const b of this.element.querySelectorAll("button"))b.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await placeCourtCast(this.sceneId,this._station,raw,{lighting:this._lighting});if(this.rendered)await this.render();}
     catch(e){console.error(MODULE_ID,e);ui.notifications.error(e.message??String(e));}
-    finally{this._busy=false;for(const b of this.element?.querySelectorAll("button")??[])b.disabled=false;}
+    finally{this._busy=false;restoreButtons();}
   }
   static async dismissAction(event,target){await this.run(()=>dismissCourtCast(this.sceneId,target.dataset.station));}
   static async focusAction(event,target){

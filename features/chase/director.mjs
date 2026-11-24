@@ -1,3 +1,4 @@
+import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {CHASE,initialChase,readChase,positionName,move,adjustPoints,setRequirements,reveal,nextRound,resetChase,obstacleRows,chaseObjects,reconcilePlan} from "./state.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
@@ -42,9 +43,9 @@ class ChaseDirector extends HandlebarsApplicationMixin(ApplicationV2){
   }
   async run(fn){
     requireGM();if(this._busy)return;
-    this._busy=true;for(const b of this.element.querySelectorAll("button"))b.disabled=true;
+    this._busy=true;const restoreButtons=disableContentActions(this.element);
     try{await fn();}catch(e){console.error(MODULE_ID,e);ui.notifications.error(e.message??String(e));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async repairAction(){await this.run(()=>operation(this.sceneId,s=>s));}
   static async viewAction(){await this.run(()=>chaseScene(this.sceneId).view());}

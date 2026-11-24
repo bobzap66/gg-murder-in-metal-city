@@ -1,3 +1,4 @@
+import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {openCourtCast} from "./cast.mjs";
 import {openCourtExhibits} from "./exhibits.mjs";
 import {openCourtRoster,openCourtJournal} from "./roster.mjs";
@@ -79,9 +80,9 @@ export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
   async run(fn){
     requireGM();if(this._busy)return;
     this._busy=true;
-    for(const b of this.element?.querySelectorAll("button")??[])b.disabled=true;
+    const restoreButtons=disableContentActions(this.element);
     try{await fn();}catch(err){console.error(MODULE_ID,err);ui.notifications.error(err.message??String(err));}
-    finally{this._busy=false;if(this.rendered)await this.render();}
+    finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
   static async cueAction(event,target){await this.run(()=>applyCourtCue(this.sceneId,target.dataset.cue));}
   static async installAction(){await this.run(()=>exclusive(this.sceneId,async scene=>{const n=await installMissing(scene);ui.notifications.info(n?"Added "+n+" courtroom lights.":"All courtroom lights already exist.");}));}
