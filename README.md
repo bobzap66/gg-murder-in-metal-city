@@ -28,6 +28,8 @@ GitHub Actions validates and builds the scaffold on pushes to main and pull requ
 Planned public manifest (not live):
 `https://github.com/bobzap66/gg-murder-in-metal-city/releases/latest/download/module.json`
 
+For a separate Forge development installation and verification checklist, see [Forge smoke test](docs/FORGE-TEST.md).
+
 ## Content and rights
 
 This project is not affiliated with, endorsed by, or sponsored by Paizo or Foundry VTT. The adventure is sold separately. Its title is used to identify intended compatibility; original adventure text, stat blocks, logos, maps, and published illustrations are excluded. New artwork based on established characters, campaign-specific clue content, and any other material derived from third-party IP are excluded pending review. Generated artwork will be disclosed and inventoried before release. No software or content redistribution license has yet been selected; do not redistribute the development files until rights and terms are finalized.
