@@ -1,3 +1,4 @@
+import {openCourtDirector} from "../features/courtroom/director.mjs";
 import {MODULE_ID} from "./features.mjs";
 import {Dashboard} from "./dashboard.mjs";
 let dashboard;
@@ -14,6 +15,7 @@ Hooks.once("init",()=>{
 Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
+    openCourtDirector,
     openManager:async()=>{
       if(!game.user?.isGM)throw new Error("GM permission is required.");
       dashboard??=new Dashboard();

@@ -6,4 +6,5 @@
 - GM-only Adventure Manager built on ApplicationV2, with independent base scene imports, world-document status, view controls, and a read-only evidence template library.
 - Import uses v14 scene levels and does not overwrite existing flagged scenes or activate scenes for players.
 - Automated unit checks for feature registry, asset paths, scene data and evidence catalog.
-- Live Foundry/Forge verification and interactive feature controls remain pending.
+- Machine Court Director: 14 managed lights, 16 cues, missing-light repair and ambient reset; accessible from the Adventure Manager or GM macro.
+- Live Foundry/Forge verification and remaining interactive feature controls remain pending.

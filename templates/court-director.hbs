@@ -1,0 +1,17 @@
+<section class="gg-mimc-director">
+  <header class="gg-mimc-director-head"><div class="gg-mimc-eyebrow">MACHINE COURT · DIRECTOR</div><h2>{{sceneName}}</h2><p>Current cue: <strong>{{activeLabel}}</strong></p><p>{{installed}} / {{total}} managed lights installed</p></header>
+  {{#if locked}}<aside class="gg-mimc-notice">Scene darkness is locked. Unlock it to use lighting cues.</aside>{{/if}}
+  <div class="gg-mimc-actions">
+    <button type="button" data-action="view"><i class="fa-solid fa-eye"></i> View courtroom</button>
+    <button type="button" data-action="install"><i class="fa-solid fa-lightbulb"></i> Install / repair lights</button>
+    <button type="button" data-action="refresh" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
+  </div>
+  {{#each groups}}
+    <section class="gg-mimc-cue-group"><h3>{{title}}</h3><div class="gg-mimc-cue-grid">
+    {{#each cues}}
+      <button type="button" data-action="cue" data-cue="{{id}}" class="{{#if active}}is-active{{/if}}" aria-pressed="{{#if active}}true{{else}}false{{/if}}"><i class="fa-solid {{icon}}"></i> {{label}}</button>
+    {{/each}}
+    </div></section>
+  {{/each}}
+  <p class="gg-mimc-legal">Cues change the selected scene for all viewers. Viewing never activates it for players. Reset restores ambient settings captured before the first cue. Existing light positions are preserved.</p>
+</section>

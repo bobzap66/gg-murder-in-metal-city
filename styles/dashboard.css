@@ -26,3 +26,14 @@
 .gg-mimc-library select{background:#102435;color:#eafaff;border-color:#357b8d;flex:1}
 @container (max-width:490px){.gg-mimc-feature{grid-template-columns:1fr}.gg-mimc-feature-art{height:100px;min-height:0}}
 .gg-mimc-manager{container-type:inline-size}
+
+.gg-mimc-director{padding:14px;display:flex;flex-direction:column;gap:12px;color:#d9e8f4;background:#071521}
+.gg-mimc-director-head{padding:12px;background:linear-gradient(115deg,#123142,#25253c);border:1px solid #496d80;border-left:3px solid #e5bd72;border-radius:6px}
+.gg-mimc-director h2,.gg-mimc-director h3{margin:0;border:0;color:#eafaff;line-height:1.2}
+.gg-mimc-director h2{font-size:1.13rem}.gg-mimc-director h3{font-size:.92rem;margin-bottom:6px;color:#bce4ed}
+.gg-mimc-director p{margin:5px 0 0}
+.gg-mimc-cue-group{padding:9px;border:1px solid #294d5e;border-radius:6px;background:#0e2232}
+.gg-mimc-cue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.gg-mimc-window .gg-mimc-cue-grid button{height:auto;min-height:37px;white-space:normal;text-align:left;padding:6px 8px;border:1px solid #395b69;border-radius:5px;color:#e2eef5;background:#183344}
+.gg-mimc-window .gg-mimc-cue-grid button:hover:not(:disabled){background:#245262;border-color:#5de5ef}
+.gg-mimc-window .gg-mimc-cue-grid button.is-active{border-color:#f0ca82;background:#54462b;color:#fff3cf}

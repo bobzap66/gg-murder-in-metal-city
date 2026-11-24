@@ -5,7 +5,7 @@
     <p>Independent scene imports and tools for the GM.</p></div>
     <span class="gg-mimc-version">v{{version}} · Development</span>
   </header>
-  <aside class="gg-mimc-notice"><i class="fa-solid fa-circle-info"></i> Base scene imports are available. Interactive controls are still in development. Importing does not activate a scene or alter an existing one.</aside>
+  <aside class="gg-mimc-notice"><i class="fa-solid fa-circle-info"></i> Base scene imports are available. The Machine Court Director is available; other interactive controls are in development. Importing does not activate a scene or alter an existing one.</aside>
   <div class="gg-mimc-features">
   {{#each features}}
     <article class="gg-mimc-feature">
@@ -18,7 +18,7 @@
         <p class="gg-mimc-pending"><strong>Planned:</strong> {{pending}}</p>
         <div class="gg-mimc-actions">
         {{#if installed}}
-          {{#each scenes}}<button type="button" data-action="openScene" data-scene="{{id}}"><i class="fa-solid fa-eye"></i> View {{name}}</button>{{/each}}
+          {{#each scenes}}<button type="button" data-action="openScene" data-scene="{{id}}"><i class="fa-solid fa-eye"></i> View {{name}}</button>{{#if ../courtroom}}<button type="button" data-action="courtDirector" data-scene="{{id}}"><i class="fa-solid fa-lightbulb"></i> Open Director</button>{{/if}}{{/each}}
         {{else}}
           <button type="button" data-action="importScene" data-feature="{{id}}" {{#if ../busy}}disabled{{/if}}><i class="fa-solid fa-download"></i> Import base scene</button>
         {{/if}}
