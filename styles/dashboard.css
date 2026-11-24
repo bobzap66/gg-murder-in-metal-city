@@ -1,0 +1,28 @@
+.gg-mimc-window .window-content{background:#071521;color:#d9e8f4;padding:0;overflow:auto}
+.gg-mimc-manager,.gg-mimc-library{padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;color:#d9e8f4;background:#071521}
+.gg-mimc-manager h1,.gg-mimc-manager h2,.gg-mimc-library h2{font-family:inherit;border:0;margin:0;color:#eafaff;line-height:1.2}
+.gg-mimc-manager h1{font-size:1.55rem}.gg-mimc-manager h2,.gg-mimc-library h2{font-size:1.1rem}
+.gg-mimc-manager p,.gg-mimc-library p{margin:0;line-height:1.4}
+.gg-mimc-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;border:1px solid #285365;border-left:3px solid #5de5ef;border-radius:8px;background:linear-gradient(115deg,#0b2938,#171c38)}
+.gg-mimc-eyebrow{font-size:.72rem;letter-spacing:.12em;color:#71e1ef;margin-bottom:6px;font-weight:700}
+.gg-mimc-version,.gg-mimc-state{font-size:.72rem;color:#b9d3df;background:#203746;border:1px solid #395b69;padding:4px 8px;border-radius:20px;white-space:nowrap}
+.gg-mimc-state.installed{color:#9af2d1;background:#103c33;border-color:#327a65}
+.gg-mimc-notice{padding:9px 11px;font-size:.85rem;color:#b8d8e9;border:1px solid #315064;border-radius:6px;background:#102435}
+.gg-mimc-features{display:flex;flex-direction:column;gap:10px}
+.gg-mimc-feature{display:grid;grid-template-columns:minmax(105px,31%) minmax(0,1fr);border:1px solid #294d5e;background:#0e2232;border-radius:8px;overflow:hidden}
+.gg-mimc-feature-art{width:100%;height:100%;min-height:145px;max-height:280px;object-fit:cover;object-position:center;border:0;border-right:1px solid #294d5e}
+.gg-mimc-feature-body{display:flex;flex-direction:column;gap:7px;padding:12px;min-width:0}
+.gg-mimc-feature-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px}
+.gg-mimc-feature-heading i{color:#5de5ef;margin-right:4px}
+.gg-mimc-available,.gg-mimc-pending{font-size:.8rem;color:#bdd4e3}.gg-mimc-pending{color:#9eb4c6}
+.gg-mimc-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gg-mimc-window .gg-mimc-actions button{width:auto;max-width:100%;height:auto;min-height:30px;white-space:normal;text-align:left;padding:5px 10px;background:#123847;color:#dffaff;border:1px solid #357b8d;border-radius:5px}
+.gg-mimc-window .gg-mimc-actions button:hover:not(:disabled){background:#205b6b;border-color:#5de5ef}
+.gg-mimc-window button:focus-visible,.gg-mimc-window select:focus-visible{outline:2px solid #f3a6ec;outline-offset:2px}
+.gg-mimc-window button:disabled{opacity:.5;cursor:wait}
+.gg-mimc-footer{justify-content:space-between;padding-top:5px;border-top:1px solid #294d5e}
+.gg-mimc-legal{font-size:.72rem;color:#9eb4c6;text-align:center}
+.gg-mimc-library label{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:#d9e8f4}
+.gg-mimc-library select{background:#102435;color:#eafaff;border-color:#357b8d;flex:1}
+@container (max-width:490px){.gg-mimc-feature{grid-template-columns:1fr}.gg-mimc-feature-art{height:100px;min-height:0}}
+.gg-mimc-manager{container-type:inline-size}

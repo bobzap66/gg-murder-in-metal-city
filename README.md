@@ -1,11 +1,23 @@
 # Greene Gaming: Murder in Metal City Add-Ons
 
-Free, unofficial supplemental tools and cinematic scenes for Foundry VTT, targeting version 14. This is a development scaffold; no playable features have been integrated yet.
+Free, unofficial supplemental tools and cinematic scenes for Foundry VTT, targeting version 14. This is a development build. Base scene imports and the GM dashboard are implemented; interactive encounter controls are not yet available.
 
 ## Planned features
 - Machine Court: original courtroom backdrop, original adjudicators, speaker lighting and exhibit presentation.
 - Investigation Tracker: independently importable evidence board and tools, using GM-supplied evidence or existing world documents.
 - Additional original visual aids as developed.
+
+## Adventure Manager
+
+In a Foundry v14 test world, enable the module, then open **Game Settings → Configure Settings → Module Settings → Greene Gaming: Murder in Metal City Add-Ons → Open Adventure Manager**. Only GMs can open the manager. A GM script macro can also call:
+
+```js
+await game.modules.get("gg-murder-in-metal-city").api.openManager();
+```
+
+Import each base scene independently. Imported scenes are tagged with the module ID and feature ID, stored in a dedicated Scene folder, and not activated or shown in player navigation automatically. Existing tagged scenes are never overwritten; View opens the scene for the requesting GM only. Refresh checks the current world documents. Imports are guarded on the current client; use one GM for installation to avoid concurrent imports from different clients. The evidence template library previews the twelve blank designs without exposing any campaign data.
+
+The courtroom includes the matching foreground image on the main v14 Level. Counsel, lighting, exhibit display, evidence reveal, and chase tracking are not yet implemented. No automatic scene imports or macros are created on world load. The dashboard and importer target Foundry v14, but have not yet been run in a live Foundry/Forge world.
 
 ## Development and installation
 

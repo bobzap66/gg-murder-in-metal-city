@@ -1,0 +1,36 @@
+<section class="gg-mimc-manager">
+  <header class="gg-mimc-hero">
+    <div><div class="gg-mimc-eyebrow">GREENE GAMING · ADVENTURE MANAGER</div>
+    <h1>Murder in Metal City Add-Ons</h1>
+    <p>Independent scene imports and tools for the GM.</p></div>
+    <span class="gg-mimc-version">v{{version}} · Development</span>
+  </header>
+  <aside class="gg-mimc-notice"><i class="fa-solid fa-circle-info"></i> Base scene imports are available. Interactive controls are still in development. Importing does not activate a scene or alter an existing one.</aside>
+  <div class="gg-mimc-features">
+  {{#each features}}
+    <article class="gg-mimc-feature">
+      <img class="gg-mimc-feature-art" src="{{image}}" alt="">
+      <div class="gg-mimc-feature-body">
+        <div class="gg-mimc-feature-heading"><h2><i class="{{icon}}"></i> {{title}}</h2>
+        {{#if installed}}<span class="gg-mimc-state installed">Imported</span>{{else}}<span class="gg-mimc-state">Ready to import</span>{{/if}}</div>
+        <p>{{description}}</p>
+        <p class="gg-mimc-available"><strong>Available:</strong> {{available}}</p>
+        <p class="gg-mimc-pending"><strong>Planned:</strong> {{pending}}</p>
+        <div class="gg-mimc-actions">
+        {{#if installed}}
+          {{#each scenes}}<button type="button" data-action="openScene" data-scene="{{id}}"><i class="fa-solid fa-eye"></i> View {{name}}</button>{{/each}}
+        {{else}}
+          <button type="button" data-action="importScene" data-feature="{{id}}" {{#if ../busy}}disabled{{/if}}><i class="fa-solid fa-download"></i> Import base scene</button>
+        {{/if}}
+        </div>
+        {{#if multiple}}<small>Multiple imported scenes found. None will be replaced.</small>{{/if}}
+      </div>
+    </article>
+  {{/each}}
+  </div>
+  <footer class="gg-mimc-actions gg-mimc-footer">
+    <button type="button" data-action="evidenceLibrary"><i class="fa-solid fa-folder-open"></i> Evidence template library</button>
+    <button type="button" data-action="refresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+  </footer>
+  <p class="gg-mimc-legal">Unofficial supplement · AI-generated artwork · No adventure handouts included · Foundry v14 development build</p>
+</section>
