@@ -9,4 +9,5 @@
 - Machine Court Director: 14 managed lights, 16 cues, missing-light repair and ambient reset; accessible from the Adventure Manager or GM macro.
 - Eight original court official journals and GM Hearing Guide; private-by-default, missing-only imports, portraits and character cards, roster and current-speaker journal shortcuts.
 - Shared evidence library with private drafts, explicit player-readable journal snapshots, withdrawal, eleven board slots, native journal pins and replaceable subject portrait/name.
+- Courtroom exhibit controller reuses published evidence artwork and journals, with screen tiles, optional lighting, stable exhibit numbering, admission tracking, configurable target and private trial register.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

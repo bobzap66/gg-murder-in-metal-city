@@ -25,7 +25,7 @@ function draftById(id){
 async function folder(name){
   return game.folders.find(f=>f.type==="JournalEntry"&&f.name===name&&!f.folder)??await foundry.documents.Folder.create({name,type:"JournalEntry",color:"#14788c"});
 }
-async function exclusive(fn){requireGM();if(busy)throw new Error("Evidence operation already running on this client.");busy=true;try{return await fn();}finally{busy=false;}}
+export async function exclusive(fn){requireGM();if(busy)throw new Error("Evidence operation already running on this client.");busy=true;try{return await fn();}finally{busy=false;}}
 async function saveDraft(id,raw){
   return exclusive(async()=>{
     const catalog=await loadEvidenceCatalog(), d=normalizeDraft(raw,catalog);

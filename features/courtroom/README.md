@@ -10,7 +10,7 @@ The default spotlight radius and intensity are starting values, not yet verified
 
 GM macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtDirector();` (selects the viewed tagged courtroom or the only imported courtroom). Pass a scene ID explicitly if necessary.
 
-Counsel artwork, evidence projection and ambience are not included in this step. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
+Counsel placement and ambience are not included in this step. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
 
 ## GM journals and court roster
 
@@ -21,3 +21,15 @@ Journal entries start with default ownership None; pages inherit. Existing entri
 Macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtRoster();`
 
 These profiles and hearing guide are optional original GM material, not official adventure rules. No verdict or extra mechanics are prescribed. The journal importer has not yet been exercised in a live Foundry/Forge world.
+
+## Exhibit presentation and trial register
+
+Open **Exhibit control** from the Director, select a published evidence journal, and Present exhibit. The module uses the same artwork and journal as the investigation board; it creates only a tagged screen backing, aspect-fit image tile and journal pin, not a duplicate evidence entry. A rectangular display area is measured against the original courtroom; confirm its placement in Forge. Optional focus lighting invokes the existing evidence cue. Players can inspect the original journal through the pin or Journal sidebar. The controller never publishes private drafts.
+
+Each first presentation assigns the next exhibit number, which remains stable for that published journal version. Presenting again reuses its number. Admit or Withdraw admission independently of the screen; Clear display restores the original background and leaves admissions unchanged. The optional target is a GM-supplied count, defaults to zero (disabled), and never determines the verdict. No official adventure mechanics are included. The private Trial Record journal is created per imported courtroom and stores exhibit history, actions and UTC timestamps; opening it refreshes its generated register page. Additional manually created pages are preserved; do not edit the generated page if you want your edits retained. This is an exhibit activity log, not a verbatim transcript.
+
+Withdrawing evidence publication in the shared library removes all managed tiles and pins, including the courtroom screen. An unavailable exhibit stays in the historical record but is excluded from the current admission count. Refresh the controller or open the trial record to update availability. Republishing a revised draft creates a different journal version and therefore a new exhibit number. No destructive trial reset is provided yet. Use a separate imported/duplicated courtroom with its own scene ID for a separate trial, or archive the old trial record manually after clearing the display. Use one GM client for all library and courtroom operations. Scene objects and public journals are not secrecy mechanisms; never put private information in published fields.
+
+Macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtExhibits();`
+
+Live test: publish evidence, place on board, present in court, inspect as player, admit, clear, present again, withdraw admission, withdraw publication, refresh record and verify all placements are removed. Check the display geometry, lighting and journal permissions on The Forge.

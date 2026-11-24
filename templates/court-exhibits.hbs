@@ -1,0 +1,19 @@
+<section class="gg-mimc-director gg-mimc-exhibits">
+<header class="gg-mimc-director-head"><div class="gg-mimc-eyebrow">MACHINE COURT · EXHIBIT CONTROL</div><h2>{{sceneName}}</h2><p>Presented evidence uses the investigation's published journals.</p></header>
+<section class="gg-mimc-cue-group gg-mimc-evidence-fields">
+  <h3>Holographic display</h3>
+  <div class="gg-mimc-display-state">{{#if shown}}<strong>Exhibit {{shown.number}} — {{shown.title}}</strong><p>{{#if shown.admitted}}Admitted into the record{{else}}Presented, not admitted{{/if}}</p>{{else}}<strong>THE MACHINE COURT</strong><p>No available exhibit on display</p>{{/if}}</div>
+  {{#if hasChoices}}<label>Published evidence<select name="exhibit">{{#each choices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{title}}</option>{{/each}}</select></label>
+  <label class="gg-mimc-inline-check"><input type="checkbox" name="lighting" {{#if lighting}}checked{{/if}}> Focus lighting on display</label>
+  <div class="gg-mimc-actions"><button type="button" data-action="present"><i class="fa-solid fa-display"></i> Present exhibit</button><button type="button" data-action="clear">Clear display</button></div>
+  {{else}}<p>No published evidence available. Publish a clue in the shared library first.</p><div class="gg-mimc-actions"><button type="button" data-action="clear">Clear display</button></div>{{/if}}
+</section>
+<section class="gg-mimc-cue-group gg-mimc-evidence-fields"><h3>Admission register</h3>
+  <div class="gg-mimc-display-state"><strong>{{admitted}}{{#if hasTarget}} / {{target}}{{/if}} admitted</strong><p>{{#if targetReached}}Configured target reached — GM determines the result.{{else}}Administrative count; no automatic verdict.{{/if}}</p>{{#if unavailable}}<p>{{unavailable}} previously admitted exhibit(s) unavailable; excluded from count.</p>{{/if}}</div>
+  <label>Optional admission target (0 disables)<input type="number" name="target" min="0" max="999" step="1" value="{{target}}"></label><div class="gg-mimc-actions"><button type="button" data-action="target">Save target</button></div>
+  {{#each rows}}<article class="gg-mimc-record"><strong>Exhibit {{number}} — {{title}}</strong><small>{{#if admitted}}Admitted{{else}}Not admitted{{/if}}{{#unless available}} · Publication unavailable{{/unless}}</small>
+    <div class="gg-mimc-actions">{{#if available}}<button type="button" data-action="inspect" data-id="{{journalId}}">Inspect</button>{{#unless admitted}}<button type="button" data-action="admit" data-id="{{journalId}}">Admit</button>{{/unless}}{{/if}}{{#if admitted}}<button type="button" data-action="unadmit" data-id="{{journalId}}">Withdraw admission</button>{{/if}}</div></article>{{else}}<p>No exhibits presented yet.</p>{{/each}}
+</section>
+<div class="gg-mimc-actions"><button type="button" data-action="record"><i class="fa-solid fa-book-open"></i> GM Trial Record</button><button type="button" data-action="library">Evidence library</button><button type="button" data-action="refresh">Refresh</button></div>
+<p class="gg-mimc-legal">Clearing the display does not withdraw admission. Withdrawing a publication in the shared library removes its managed tiles and journal pins; the historical record remains private. Players can open the published journal from the display pin or Journal sidebar. No verdict is automated.</p>
+</section>

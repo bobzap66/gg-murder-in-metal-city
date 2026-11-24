@@ -1,3 +1,4 @@
+import {openCourtExhibits} from "../features/courtroom/exhibits.mjs";
 import {openEvidenceManager} from "../features/investigation/library.mjs";
 import {openCourtRoster,importCourtJournals} from "../features/courtroom/roster.mjs";
 import {openCourtDirector} from "../features/courtroom/director.mjs";
@@ -19,6 +20,7 @@ Hooks.once("ready",()=>{
   module.api=Object.freeze({
     openEvidenceManager,
     openCourtDirector,
+    openCourtExhibits,
     openCourtRoster,
     importCourtJournals,
     openManager:async()=>{

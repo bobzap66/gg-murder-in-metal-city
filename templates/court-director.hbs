@@ -7,6 +7,7 @@
     <button type="button" data-action="refresh" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
   </div>
   <div class="gg-mimc-actions"><button type="button" data-action="roster"><i class="fa-solid fa-book-open"></i> Court officials</button>{{#if profile}}<button type="button" data-action="profile" data-profile="{{profile.id}}"><i class="fa-solid fa-book-open"></i> {{profile.name}} — GM notes</button>{{/if}}</div>
+  <div class="gg-mimc-actions"><button type="button" data-action="exhibits"><i class="fa-solid fa-display"></i> Exhibit control</button></div>
   {{#each groups}}
     <section class="gg-mimc-cue-group"><h3>{{title}}</h3><div class="gg-mimc-cue-grid">
     {{#each cues}}

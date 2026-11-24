@@ -50,3 +50,8 @@
 .gg-mimc-record{display:flex;flex-direction:column;gap:5px;border:1px solid #294d5e;padding:8px;margin:7px 0;border-radius:5px;background:#122a3a;overflow-wrap:anywhere}
 .gg-mimc-record.is-selected{border-color:#71e1ef}.gg-mimc-record small{color:#9eb4c6}
 @container (max-width:570px){.gg-mimc-evidence-layout{grid-template-columns:1fr}}
+
+.gg-mimc-display-state{padding:12px;border:1px solid #357b8d;border-radius:6px;background:#092837;color:#c9f7ff;overflow-wrap:anywhere}
+.gg-mimc-display-state strong{font-size:1.12rem;color:#81e8f5}
+.gg-mimc-exhibits .gg-mimc-inline-check{display:flex;flex-direction:row;align-items:center;gap:8px}
+.gg-mimc-exhibits .gg-mimc-inline-check input{width:auto}
