@@ -37,3 +37,8 @@
 .gg-mimc-window .gg-mimc-cue-grid button{height:auto;min-height:37px;white-space:normal;text-align:left;padding:6px 8px;border:1px solid #395b69;border-radius:5px;color:#e2eef5;background:#183344}
 .gg-mimc-window .gg-mimc-cue-grid button:hover:not(:disabled){background:#245262;border-color:#5de5ef}
 .gg-mimc-window .gg-mimc-cue-grid button.is-active{border-color:#f0ca82;background:#54462b;color:#fff3cf}
+
+.gg-mimc-roster-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,275px),1fr));gap:8px}
+.gg-mimc-roster-card{display:grid;grid-template-columns:80px minmax(0,1fr);gap:10px;padding:9px;background:#122a3a;border:1px solid #315064;border-radius:6px}
+.gg-mimc-roster-card img{width:80px;height:105px;object-fit:cover;border:1px solid #496d80;border-radius:4px}
+.gg-mimc-roster-card h3{font-size:.94rem;margin:0}.gg-mimc-roster-card p{font-size:.8rem;line-height:1.4;margin:4px 0 6px}.gg-mimc-roster-card small{color:#9eb4c6}

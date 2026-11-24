@@ -1,0 +1,13 @@
+<section class="gg-mimc-director gg-mimc-roster">
+  <header class="gg-mimc-director-head"><div class="gg-mimc-eyebrow">MACHINE COURT · GM REFERENCE</div><h2>Court Officials</h2><p>Original characters and optional hearing guidance. Import into a private Journal folder; existing entries are never overwritten.</p></header>
+  <div class="gg-mimc-actions">
+    {{#if missing}}<button type="button" data-action="importJournals"><i class="fa-solid fa-download"></i> Import missing journals ({{missing}})</button>{{else}}<span class="gg-mimc-state installed">All 9 journals imported</span>{{/if}}
+    {{#if guideInstalled}}<button type="button" data-action="openJournal" data-profile="{{guideId}}"><i class="fa-solid fa-book-open"></i> GM Hearing Guide</button>{{/if}}
+    <button type="button" data-action="refresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+  </div>
+  {{#each groups}}<section class="gg-mimc-cue-group"><h3>{{title}}</h3><div class="gg-mimc-roster-grid">
+    {{#each profiles}}<article class="gg-mimc-roster-card"><img src="{{portrait}}" alt=""><div><h3>{{name}}</h3><p class="gg-mimc-available">{{title}}</p><p>{{personality}}</p>
+    {{#if installed}}<div class="gg-mimc-actions"><button type="button" data-action="openJournal" data-profile="{{id}}"><i class="fa-solid fa-book-open"></i> Open GM journal</button></div>{{else}}<small>Not imported</small>{{/if}}</div></article>{{/each}}
+  </div></section>{{/each}}
+  <p class="gg-mimc-legal">Journal entries are created with default player ownership None. Portrait and card pages can be shared deliberately using Foundry's normal image tools. Module source content is public; do not treat bundled lore as secret.</p>
+</section>

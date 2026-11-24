@@ -1,3 +1,5 @@
+import {openCourtRoster,openCourtJournal} from "./roster.mjs";
+import {PROFILES} from "./profiles.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {LIGHTS,GROUPS,cueDefinition,lightRole,missingLights,lightData,lightUpdates} from "./lighting.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
@@ -57,7 +59,7 @@ export async function applyCourtCue(sceneId,id){
   });
 }
 export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
-  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Director",resizable:true},position:{width:435,height:650},actions:{cue:CourtDirector.cueAction,install:CourtDirector.installAction,view:CourtDirector.viewAction,refresh:CourtDirector.refreshAction}};
+  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Director",resizable:true},position:{width:435,height:650},actions:{cue:CourtDirector.cueAction,install:CourtDirector.installAction,view:CourtDirector.viewAction,refresh:CourtDirector.refreshAction,roster:CourtDirector.rosterAction,profile:CourtDirector.profileAction}};
   static PARTS={body:{template:ROOT+"templates/court-director.hbs"}};
   constructor(sceneId){super({id:"gg-mimc-director-"+sceneId});this.sceneId=sceneId;}
   _busy=false;
@@ -68,7 +70,9 @@ export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
     const stored=scene.getFlag(MODULE_ID,"courtCue")??"reset";
     const groups=GROUPS.map(g=>({...g,cues:g.cues.map(c=>({...c,active:c.id===stored}))}));
     const active=groups.flatMap(g=>g.cues).find(c=>c.active);
-    return {...await super._prepareContext(options),groups,sceneName:scene.name,activeLabel:active?.label??"Unknown",installed:LIGHTS.length-missing,total:LIGHTS.length,missing,busy:this._busy,locked:scene.environment.darknessLevelLock};
+    const profile=PROFILES.find(p=>p.cue===stored);
+    const profileReady=profile&&game.journal.contents.some(j=>j.getFlag(MODULE_ID,"courtJournal")===profile.id);
+    return {...await super._prepareContext(options),profile:profileReady?profile:null,groups,sceneName:scene.name,activeLabel:active?.label??"Unknown",installed:LIGHTS.length-missing,total:LIGHTS.length,missing,busy:this._busy,locked:scene.environment.darknessLevelLock};
   }
   async run(fn){
     requireGM();if(this._busy)return;
@@ -80,6 +84,8 @@ export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
   static async cueAction(event,target){await this.run(()=>applyCourtCue(this.sceneId,target.dataset.cue));}
   static async installAction(){await this.run(()=>exclusive(this.sceneId,async scene=>{const n=await installMissing(scene);ui.notifications.info(n?"Added "+n+" courtroom lights.":"All courtroom lights already exist.");}));}
   static async viewAction(){await this.run(()=>resolveScene(this.sceneId).view());}
+  static async rosterAction(){await this.run(()=>openCourtRoster());}
+  static async profileAction(event,target){await this.run(()=>openCourtJournal(target.dataset.profile));}
   static async refreshAction(){requireGM();if(!this._busy)await this.render();}
   async _onClose(options){directors.delete(this.sceneId);await super._onClose(options);}
 }

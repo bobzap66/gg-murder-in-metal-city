@@ -22,6 +22,7 @@
         {{else}}
           <button type="button" data-action="importScene" data-feature="{{id}}" {{#if ../busy}}disabled{{/if}}><i class="fa-solid fa-download"></i> Import base scene</button>
         {{/if}}
+          {{#if courtroom}}<button type="button" data-action="courtRoster"><i class="fa-solid fa-book-open"></i> Court officials</button>{{/if}}
         </div>
         {{#if multiple}}<small>Multiple imported scenes found. None will be replaced.</small>{{/if}}
       </div>

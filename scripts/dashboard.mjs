@@ -1,3 +1,4 @@
+import {openCourtRoster} from "../features/courtroom/roster.mjs";
 import {openCourtDirector} from "../features/courtroom/director.mjs";
 import {MODULE_ID, ROOT, FEATURES, findFeature, matchingScenes, makeSceneData} from "./features.mjs";
 import {renderEvidenceCard} from "../features/investigation/card.mjs";
@@ -71,7 +72,8 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
       openScene:Dashboard.openAction,
       refresh:Dashboard.refreshAction,
       evidenceLibrary:Dashboard.libraryAction,
-      courtDirector:Dashboard.courtAction
+      courtDirector:Dashboard.courtAction,
+      courtRoster:Dashboard.rosterAction
     }
   };
   static PARTS={body:{template:ROOT+"templates/dashboard.hbs"}};
@@ -109,6 +111,7 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
     });
   }
   static async courtAction(event,target){await this.run(()=>openCourtDirector(target.dataset.scene));}
+  static async rosterAction(){await this.run(()=>openCourtRoster());}
   static async refreshAction(){requireGM();await this.render();}
   static async libraryAction(){
     await this.run(async()=>{

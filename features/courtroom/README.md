@@ -10,4 +10,14 @@ The default spotlight radius and intensity are starting values, not yet verified
 
 GM macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtDirector();` (selects the viewed tagged courtroom or the only imported courtroom). Pass a scene ID explicitly if necessary.
 
-Counsel artwork, journals, evidence projection and ambience are not included in this step. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
+Counsel artwork, evidence projection and ambience are not included in this step. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
+
+## GM journals and court roster
+
+Open **Court officials** from the Adventure Manager or Director, then **Import missing journals**. This creates eight editable NPC entries plus a GM Hearing Guide in the Journal folder Greene Gaming — Machine Court. Each NPC has roleplaying notes, portrait and character card pages. Existing entries are recognized by a stable module flag and never overwritten. Missing entries can be restored independently. No actor or stat block is created. The Director offers a shortcut to the current official's journal once imported.
+
+Journal entries start with default ownership None; pages inherit. Existing entries retain any permissions or edits you have assigned. Share only the portrait or card deliberately through Foundry, not the private roleplaying notes. The original bundled source is public and is not a mechanism for hiding campaign secrets. Use one GM client for imports.
+
+Macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtRoster();`
+
+These profiles and hearing guide are optional original GM material, not official adventure rules. No verdict or extra mechanics are prescribed. The journal importer has not yet been exercised in a live Foundry/Forge world.
