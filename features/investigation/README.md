@@ -1,0 +1,9 @@
+# Investigation artwork and card templates
+
+This is a reusable, unbranded art and template layer, not yet an integrated Foundry feature. `catalog.json` describes the 1672 × 941 investigation board, its eleven evidence slots, its replaceable subject portrait and nameplate, and twelve evidence card types. Position values are normalized fractions of the background image, with top-left origin. Each slot can hold any one card; twelve template types are available, so the GM can choose, reuse, or rotate them. Coordinates are initial visual measurements; verify alignment inside Foundry.
+
+`card.mjs` exports `renderEvidenceCard(template, values, options)`, which returns a DOM element. Load `card.css` wherever the renderer is used. Values are keyed by the field IDs in the selected template and displayed as literal text (not HTML). Missing values are blank placeholders. The default asset path is module-relative; an alternate base can be provided for a standalone preview. Use the full card in a journal/viewer and the illustration or short label on the board; do not shrink long evidence text into small tile slots.
+
+The renderer does not read journals, persist evidence, implement ownership, or reveal documents. A later integration must enforce GM authority, use only player-authorized and revealed fields, and keep secret GM notes separate. Do not include published adventure handouts, clues, or player-specific campaign data in the module. GMs provide their own information and any licensed subject portrait.
+
+The images are newly AI-generated, unbranded generic illustrations, with no adventure-specific clue data. Some images contain incidental fictional screen glyphs or timestamps as decorative details, not as evidence. The twelve thumbnails were cropped from a contact sheet; they are intended as small card illustrations rather than full-screen art.

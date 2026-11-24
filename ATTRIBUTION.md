@@ -39,3 +39,11 @@ Artwork depicting published characters Hesop and Prime-Facilitator and campaign-
 - `assets/chase/chase-card-cover.webp`: original AI-generated unbranded card cover, converted to WebP with transparency retained (941 × 1672).
 
 The alternate board with preprinted chase-point values is retained separately for personal campaign use pending content review. No new brand marks have been added.
+
+## Investigation — reusable artwork and templates
+
+- `assets/investigation/evidence-board.webp`: new OpenAI-generated cyberpunk office and blank eleven-slot board, 1672 × 941. No fixed subject portrait or name.
+- Twelve WebP illustrations cropped from a new generated concept sheet: `access-authorization.webp`, `archive-analysis.webp`, `dispatch-anomaly.webp`, `drone-scan.webp`, `forensic-analysis.webp`, `memory-log.webp`, `query-log.webp`, `recovered-communications.webp`, `recovered-datapad.webp`, `security-footage.webp`, `storage-cache.webp`, `witness-transaction.webp`. Generic imagery only; incidental screen glyphs and timestamps are decorative. No published handout text or adventure-specific clue values included.
+- `features/investigation/`: original template catalog, normalized board positions, card-rendering helper and scoped stylesheet. GM-supplied data is separate; do not bundle campaign records or published handouts.
+
+These assets are AI-generated and included for development, subject to final distribution and licensing review. Original personal-use evidence art remains outside this repository.

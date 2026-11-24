@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "board": {
+    "image": "assets/investigation/evidence-board.webp",
+    "width": 1672,
+    "height": 941,
+    "slots": [
+      {
+        "id": "evidence-01",
+        "x": 0.227549,
+        "y": 0.088362,
+        "width": 0.157767,
+        "height": 0.123922
+      },
+      {
+        "id": "evidence-02",
+        "x": 0.424757,
+        "y": 0.088362,
+        "width": 0.154733,
+        "height": 0.123922
+      },
+      {
+        "id": "evidence-03",
+        "x": 0.618325,
+        "y": 0.088362,
+        "width": 0.157767,
+        "height": 0.123922
+      },
+      {
+        "id": "evidence-04",
+        "x": 0.145024,
+        "y": 0.268319,
+        "width": 0.171117,
+        "height": 0.114224
+      },
+      {
+        "id": "evidence-05",
+        "x": 0.145024,
+        "y": 0.442888,
+        "width": 0.171117,
+        "height": 0.115302
+      },
+      {
+        "id": "evidence-06",
+        "x": 0.145024,
+        "y": 0.614224,
+        "width": 0.171117,
+        "height": 0.110991
+      },
+      {
+        "id": "evidence-07",
+        "x": 0.686893,
+        "y": 0.268319,
+        "width": 0.171117,
+        "height": 0.114224
+      },
+      {
+        "id": "evidence-08",
+        "x": 0.686893,
+        "y": 0.442888,
+        "width": 0.171117,
+        "height": 0.115302
+      },
+      {
+        "id": "evidence-09",
+        "x": 0.686893,
+        "y": 0.614224,
+        "width": 0.171117,
+        "height": 0.110991
+      },
+      {
+        "id": "evidence-10",
+        "x": 0.347694,
+        "y": 0.707974,
+        "width": 0.132282,
+        "height": 0.107759
+      },
+      {
+        "id": "evidence-11",
+        "x": 0.524272,
+        "y": 0.707974,
+        "width": 0.132282,
+        "height": 0.107759
+      }
+    ],
+    "subjectPortrait": {
+      "x": 0.43932,
+      "y": 0.299569,
+      "width": 0.122573,
+      "height": 0.260776
+    },
+    "subjectName": {
+      "x": 0.415655,
+      "y": 0.592672,
+      "width": 0.17051,
+      "height": 0.037716
+    }
+  },
+  "templates": [
+    {
+      "id": "recovered-datapad",
+      "title": "Recovered Datapad",
+      "image": "assets/investigation/recovered-datapad.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Subject or owner"
+        },
+        {
+          "id": "field2",
+          "label": "Contents"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "drone-scan",
+      "title": "Drone Programming Scan",
+      "image": "assets/investigation/drone-scan.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Drone designation"
+        },
+        {
+          "id": "field2",
+          "label": "Programming findings"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "query-log",
+      "title": "Query Log",
+      "image": "assets/investigation/query-log.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Log source"
+        },
+        {
+          "id": "field2",
+          "label": "Relevant queries"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "storage-cache",
+      "title": "Storage Cache",
+      "image": "assets/investigation/storage-cache.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Location"
+        },
+        {
+          "id": "field2",
+          "label": "Recovered contents"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "memory-log",
+      "title": "Memory Log",
+      "image": "assets/investigation/memory-log.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Log source"
+        },
+        {
+          "id": "field2",
+          "label": "Recovered memories"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "recovered-communications",
+      "title": "Recovered Communications",
+      "image": "assets/investigation/recovered-communications.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Origin"
+        },
+        {
+          "id": "field2",
+          "label": "Message contents"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "witness-transaction",
+      "title": "Witness / Transaction",
+      "image": "assets/investigation/witness-transaction.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Witness or subject"
+        },
+        {
+          "id": "field2",
+          "label": "Transaction details"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "dispatch-anomaly",
+      "title": "Security Dispatch Anomaly",
+      "image": "assets/investigation/dispatch-anomaly.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Dispatch record"
+        },
+        {
+          "id": "field2",
+          "label": "Observed discrepancy"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "security-footage",
+      "title": "Compromised Security Footage",
+      "image": "assets/investigation/security-footage.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Recording source"
+        },
+        {
+          "id": "field2",
+          "label": "Key observations"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "access-authorization",
+      "title": "Access Authorization",
+      "image": "assets/investigation/access-authorization.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Access record"
+        },
+        {
+          "id": "field2",
+          "label": "User or origin"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "archive-analysis",
+      "title": "Archive Crime Scene Analysis",
+      "image": "assets/investigation/archive-analysis.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Scene location"
+        },
+        {
+          "id": "field2",
+          "label": "Forensic findings"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    },
+    {
+      "id": "forensic-analysis",
+      "title": "Forensic Analysis",
+      "image": "assets/investigation/forensic-analysis.webp",
+      "fields": [
+        {
+          "id": "field1",
+          "label": "Scene details"
+        },
+        {
+          "id": "field2",
+          "label": "Evidence collected"
+        },
+        {
+          "id": "notes",
+          "label": "Investigator notes"
+        }
+      ]
+    }
+  ]
+}
