@@ -1,0 +1,46 @@
+name: Validate and package
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: find scripts features -type f \( -name '*.js' -o -name '*.mjs' \) -exec node --check {} \;
+      - name: Build module
+        run: python3 tools/build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundry-module
+          path: dist/
+  draft-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: foundry-module
+          path: dist
+      - name: Verify tag and create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION=$(python3 -c 'import json; print(json.load(open("dist/module.json"))["version"])')
+          test "$TAG" = "v$VERSION"
+          gh release create "$TAG" dist/module.json dist/module.zip --verify-tag --draft --title "$TAG" --notes "Development build. Review compatibility, content rights and licensing before publishing."

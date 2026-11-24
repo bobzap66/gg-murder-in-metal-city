@@ -1,0 +1,3 @@
+# Content policy
+
+Include only independently created or explicitly cleared material. Do not commit the adventure PDF, official images, maps, handouts, stat blocks, verbatim text, extracted compendiums, private campaign records or credentials. Original scene assets must be reviewed for embedded third-party marks and references. Keep adventure-derived character designs and evidence data out of the distributable module; allow GMs to select their own licensed assets and world documents. Record provenance and AI generation disclosures in ATTRIBUTION.md before adding assets. Review all public-facing title references and any applicable compatibility/attribution requirements prior to release. Free distribution does not by itself grant third-party rights.
