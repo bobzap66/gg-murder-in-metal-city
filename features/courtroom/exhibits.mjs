@@ -134,3 +134,5 @@ export async function openCourtExhibits(sceneId){
   if(!sceneId){const viewed=globalThis.canvas?.scene, courts=matchingScenes(game.scenes.contents,"courtroom");sceneId=viewed?.getFlag(MODULE_ID,"feature")==="courtroom"?viewed.id:courts.length===1?courts[0].id:null;}
   court(sceneId);let app=apps.get(sceneId);if(!app){app=new ExhibitDirector(sceneId);apps.set(sceneId,app);}return app.render({force:true});
 }
+
+export async function restoreTrial(sceneId,state){return evidenceOperation(async()=>{const entry=await ensureRecord(court(sceneId));await saveRecord(entry,state);});}

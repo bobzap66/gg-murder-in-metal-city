@@ -21,7 +21,7 @@ async function getCatalog() {
   return catalogPromise;
 }
 
-async function importBaseScene(id) {
+export async function importBaseScene(id) {
   requireGM();
   if (importBusy) throw new Error("An import is already in progress on this client.");
   importBusy=true;
@@ -80,7 +80,8 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
       courtRoster:Dashboard.rosterAction,
       evidenceManager:Dashboard.evidenceAction,
       chaseDirector:Dashboard.chaseAction,
-      installMacros:Dashboard.macroAction
+      installMacros:Dashboard.macroAction,
+      configuration:Dashboard.configAction
     }
   };
   static PARTS={body:{template:ROOT+"templates/dashboard.hbs"}};
@@ -122,6 +123,7 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
   static async rosterAction(){await this.run(()=>openCourtRoster());}
   static async evidenceAction(event,target){await this.run(()=>openEvidenceManager(target.dataset.scene));}
   static async chaseAction(event,target){await this.run(()=>openChaseDirector(target.dataset.scene));}
+  static async configAction(){await this.run(async()=>{const {openConfiguration}=await import('./configuration-ui.mjs');await openConfiguration();});}
   static async macroAction(){await this.run(async()=>{const macros=await installGMMacros();ui.notifications.info(macros.length?"Installed "+macros.length+" GM shortcuts. Open the Macro Directory and drag them to your hotbar.":"All GM shortcuts already exist.");});}
   static async refreshAction(){requireGM();await this.render();}
   static async libraryAction(){

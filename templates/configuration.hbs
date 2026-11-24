@@ -1,0 +1,33 @@
+<section class="gg-mimc-manager gg-mimc-config">
+  <header class="gg-mimc-hero"><div><div class="gg-mimc-eyebrow">GREENE GAMING · PORTABLE CONFIGURATION</div><h1>Configuration Import / Export</h1><p>Prepare in a local world, transfer to Forge, preserve private evidence.</p></div></header>
+  <aside class="gg-mimc-notice">Private files may contain spoilers, GM notes and licensed adventure material. Never commit your campaign JSON or custom assets to a public repository. This is not a full world backup. Only module-managed data is transferred.</aside>
+  <section class="gg-mimc-cue-group gg-mimc-evidence-fields">
+    <h2>Export configuration</h2>
+    <label>Export mode<select name="mode">{{#each modes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+    <p>Setup: scenes, cast, lighting, case subject and chase requirements. Preparation: also private evidence drafts and court journal text/art references. Campaign state: also published snapshots, placements, exhibits and chase progress.</p>
+    <div class="gg-mimc-config-checks">{{#each features}}<label><input type="checkbox" data-feature="{{id}}" {{#if selected}}checked{{/if}}> {{title}}</label>{{/each}}
+    <label><input type="checkbox" name="macros" {{#if macros}}checked{{/if}}> Include installed standard GM shortcuts</label></div>
+    <div class="gg-mimc-actions"><button type="button" data-action="export"><i class="fa-solid fa-download"></i> Export private JSON</button></div>
+  </section>
+  <section class="gg-mimc-cue-group gg-mimc-evidence-fields">
+    <h2>Import configuration</h2>
+    <label>Configuration file<input type="file" accept=".json,application/json" name="file"></label>
+    {{#if filename}}<p>Selected: <strong>{{filename}}</strong></p>{{/if}}
+    <label>Asset path replacements (JSON object; optional)<textarea name="mapping" rows="3">{{mapping}}</textarea></label>
+    <p>Upload your custom artwork to Forge first. Map old paths to new paths, e.g. {"worlds/local/art/npc.png":"your-forge-asset-path/npc.png"}. Included module assets retain their original paths.</p>
+    <div class="gg-mimc-actions"><button type="button" data-action="preview">Validate &amp; preview</button></div>
+    {{#if preview}}
+    <div data-preview-status>Preview: {{preview.data.mode}} — {{preview.summary.scenes}} scenes, {{preview.summary.drafts}} drafts, {{preview.summary.published}} public snapshots, {{preview.summary.officials}} court journals, {{preview.summary.assets}} referenced assets.</div>
+    {{#if preview.missing.length}}<aside class="gg-mimc-notice"><strong>Missing assets — import blocked</strong>{{#each preview.missing}}<p>{{path}}</p>{{/each}}</aside>{{else}}<p>Referenced images loaded successfully on this GM client.</p>{{/if}}
+    {{#if preview.conflicts.length}}<div><strong>Existing destination items</strong>{{#each preview.conflicts}}<p>{{this}}</p>{{/each}}</div>{{/if}}
+    <div class="gg-mimc-config-checks">
+      <label><input type="checkbox" name="replace" {{#if replace}}checked{{/if}}> Apply imported settings to existing managed items (otherwise merge missing only)</label>
+      <label><input type="checkbox" name="confirmReplace"> I understand managed settings and matching private journal content may be updated</label>
+      {{#if campaign}}<label><input type="checkbox" name="progress" {{#if progress}}checked{{/if}}> Restore campaign progress, including making exported public snapshots player-readable</label>{{/if}}
+      <label><input type="checkbox" name="confirm"> I have backed up this world, reviewed the preview and understand import is not transactional</label>
+    </div>
+    <div class="gg-mimc-actions"><button type="button" data-action="apply" {{#unless canApply}}disabled{{/unless}}><i class="fa-solid fa-file-import"></i> Apply configuration</button></div>
+    {{/if}}
+    {{#if log.length}}<h3>Import results</h3>{{#each log}}<p>{{this}}</p>{{/each}}{{/if}}
+  </section>
+</section>

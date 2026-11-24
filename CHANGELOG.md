@@ -17,4 +17,5 @@
 - Install GM Macros creates seven reusable GM-only shortcuts in a dedicated Macro folder, skips existing tagged or equivalent manual macros, and preserves hotbar assignments.
 - Cast placement: direct movement/size nudges, adjustable step, numeric and mirror live updates, native tile dragging and lock controls; active lighting cue toggles to Normal / Reset.
 - Explicit v14 top-left tile anchors for evidence, subjects, cast, exhibits and chase overlays. Repair board alignment realigns existing managed artwork and shrinks journal pins without changing published journals; native image pickers in evidence editor.
+- Portable versioned JSON configuration export, validated preview, image path remapping and GM-only merge/import for scene setup, court, investigation and chase; explicit opt-in for published campaign state.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

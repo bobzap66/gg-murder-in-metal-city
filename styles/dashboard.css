@@ -81,3 +81,9 @@
 
 .gg-mimc-evidence-manager .gg-mimc-cue-group h3{font:700 .95rem/1.3 inherit;font-family:inherit;font-size:.95rem;color:#bce4ed;margin:0 0 6px;border:0}
 .gg-mimc-evidence-manager file-picker{width:100%;min-width:0}
+
+.gg-mimc-config-checks{display:flex;flex-direction:column;gap:6px}
+.gg-mimc-config .gg-mimc-config-checks label{flex-direction:row;align-items:flex-start;gap:8px}
+.gg-mimc-config .gg-mimc-config-checks input{width:auto;flex:none}
+.gg-mimc-config input[type=file]{height:auto;min-height:32px}
+.gg-mimc-config p{overflow-wrap:anywhere}

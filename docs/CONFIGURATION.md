@@ -1,0 +1,16 @@
+# Portable configuration (development)
+
+Prepare locally, then transfer private JSON to the destination Foundry v14 world.
+
+1. Open Adventure Manager → Configuration Import / Export. Select features and mode.
+2. Export private JSON. Keep it private; it can contain adventure spoilers and GM notes.
+3. Upload your custom images to Forge using its normal asset tools. The module's own asset paths remain unchanged.
+4. Enable the same or newer development version on the destination. Back up the world first.
+5. Choose the JSON, supply any exact old-path → new-path replacements in a JSON object, then Validate & preview. Missing referenced images block apply.
+6. Merge missing managed objects by default, or explicitly allow imported settings to update existing managed objects. Existing published evidence with a different snapshot is never overwritten. Campaign progress and publication require a separate opt-in. Refresh open feature panels after importing.
+
+Modes: setup (scene import, initial view where available, cast, managed light geometry and core light settings, ambient baseline, trial target, subject, chase requirements, standard macro installation); preparation (also private evidence records and court text/image journals); campaign (also public snapshots, current board placements, trial exhibits/history and chase progress). Preparation never publishes evidence. Campaign imports without progress opt-in remain private. The original private draft and the public snapshot are separate data. Journal links are remapped to destination documents; historical withdrawn exhibits stay unavailable.
+
+Limitations: one tagged scene per feature, JSON only; no embedded assets, ZIP or automatic Forge upload yet. Court journal text is transferred as plain text with line breaks, not rich formatting, embedded links, arbitrary page types or ownership. Custom scene backgrounds, audio, arbitrary world settings, user hotbar positions, manual non-module objects and arbitrary macros are not transferred. Setup/preparation do not clear existing campaign progress. Replacement updates matching managed items, not a destructive world mirror; absent source items do not delete destination objects. Existing publication conflicts are skipped and reported. Missing assets are checked as GM, not proof of player asset access. Import is sequential and not transactional; a failed write may leave partial results. Use one GM client and a disposable world first. Future feature adapters should add explicitly validated data to the portable format and migration tests. Never bundle published adventure material, campaign evidence, or private preparation files in the distributable module.
+
+Suggested test: create a private draft with a unique GM note, publish an older snapshot, change the draft, place evidence and cast, adjust lights and chase requirements. Export preparation and campaign separately. Import preparation into a clean world; verify the draft exists, private note is private, and no public snapshot is created. Import campaign with explicit progress opt-in into another clean world; verify remapped journal links and the public snapshot does not contain the later private edit. Import again in merge mode; verify no duplicates. Test missing image blocking and remapping, and test with a normal Player account.

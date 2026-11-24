@@ -113,3 +113,5 @@ export async function openCourtDirector(sceneId){
   if(!app){app=new CourtDirector(sceneId);directors.set(sceneId,app);}
   return app.render({force:true});
 }
+
+export async function installCourtLights(sceneId){return exclusive(sceneId,installMissing);}

@@ -73,3 +73,5 @@ export async function openChaseDirector(sceneId){
   if(!app){app=new ChaseDirector(sceneId);apps.set(sceneId,app);}
   return app.render({force:true});
 }
+
+export async function restoreChase(sceneId,state){return operation(sceneId,()=>state);}

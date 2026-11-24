@@ -28,7 +28,7 @@ async function folder(name){
   return game.folders.find(f=>f.type==="JournalEntry"&&f.name===name&&!f.folder)??await foundry.documents.Folder.create({name,type:"JournalEntry",color:"#14788c"});
 }
 export async function exclusive(fn){requireGM();if(busy)throw new Error("Evidence operation already running on this client.");busy=true;try{return await fn();}finally{busy=false;}}
-async function saveDraft(id,raw){
+export async function saveDraft(id,raw){
   return exclusive(async()=>{
     const catalog=await loadEvidenceCatalog(), d=normalizeDraft(raw,catalog);
     if(!id){
@@ -94,7 +94,7 @@ async function withdrawDraft(id){
     await entry.delete();
   });
 }
-async function placeEvidence(sceneId,slotId,journalId){
+export async function placeEvidence(sceneId,slotId,journalId){
   return exclusive(async()=>{
     const scene=assertBoard(sceneId), catalog=await loadEvidenceCatalog(), slot=catalog.board.slots.find(s=>s.id===slotId);
     if(!slot)throw new Error("Choose an evidence slot.");
@@ -133,7 +133,7 @@ async function repairBoard(sceneId){
   });
 }
 async function removeSlot(sceneId,slotId){return exclusive(()=>clearSlot(assertBoard(sceneId),slotId));}
-async function setSubject(sceneId,name,image){
+export async function setSubject(sceneId,name,image){
   return exclusive(async()=>{
     const scene=assertBoard(sceneId), catalog=await loadEvidenceCatalog(), level=sceneLevel(scene);
     const title=String(name??"").trim().slice(0,80), src=safeImage(image);
@@ -143,7 +143,7 @@ async function setSubject(sceneId,name,image){
     await clearSlot(scene,"subject");
     const drawings=scene.drawings.contents.filter(d=>d.getFlag(MODULE_ID,PLACEMENT)?.slot==="subject");
     if(drawings.length)await scene.deleteEmbeddedDocuments("Drawing",drawings.map(d=>d.id));
-    if(src)await scene.createEmbeddedDocuments("Tile",[{name:"Investigation subject",...rect,...level,texture:{src},locked:true,hidden:false,flags}]);
+    if(src)await scene.createEmbeddedDocuments("Tile",[{name:"Investigation subject",...rect,...level,texture:topLeftTexture(src),locked:true,hidden:false,flags}]);
     if(title){
       const b=rectPixels(catalog.board.subjectName,dims);
       await scene.createEmbeddedDocuments("Drawing",[{name:"Subject name",x:b.x,y:b.y,...level,shape:{type:"r",width:b.width,height:b.height},text:title,fontSize:Math.min(22,Math.round(b.height*.65)),textColor:"#c9f7ff",textAlpha:1,strokeWidth:0,strokeAlpha:0,fillType:0,locked:true,hidden:false,interface:true,flags}]);
@@ -200,4 +200,23 @@ class EvidenceManager extends HandlebarsApplicationMixin(ApplicationV2){
 }
 export async function openEvidenceManager(sceneId){
   requireGM();app??=new EvidenceManager();if(sceneId){assertBoard(sceneId);app._board=sceneId;}return app.render({force:true});
+}
+
+/** Restore the exported public snapshot, never publish a possibly newer private draft. */
+export async function restorePublishedSnapshot(draftId,raw){
+  return exclusive(async()=>{
+    draftById(draftId);
+    const catalog=await loadEvidenceCatalog(), record=publicRecord(raw,catalog);
+    const existing=publishedFor(game.journal.contents,draftId);
+    if(existing){
+      if(!availableEvidence().some(j=>j.id===existing.id)||JSON.stringify(publicRecord(existing.getFlag(MODULE_ID,RECORD),catalog))!==JSON.stringify(record))throw new Error("Existing publication differs; resolve it manually.");
+      return existing;
+    }
+    const data=journalData(record,catalog,(await folder(PUBLIC_FOLDER)).id,draftId,options());
+    data.ownership.default=options().none;
+    const entry=await foundry.documents.JournalEntry.create(data);
+    if(!entry)throw new Error("Could not restore public snapshot.");
+    await entry.update({"ownership.default":options().observer});
+    return entry;
+  });
 }

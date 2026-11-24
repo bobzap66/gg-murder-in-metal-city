@@ -22,6 +22,7 @@ Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
     installGMMacros,
+    openConfiguration:async()=>{const {openConfiguration}=await import('./configuration-ui.mjs');return openConfiguration();},
     openEvidenceManager,
     openChaseDirector,
     openCourtDirector,

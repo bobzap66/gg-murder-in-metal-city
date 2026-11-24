@@ -21,6 +21,10 @@ Import each base scene independently. Imported scenes are tagged with the module
 
 The courtroom includes the matching foreground image on the main v14 Level. Open **Director** beside an imported courtroom for speaker lighting, proceedings presets and reset. Open **Court officials** to import eight NPC journals and a GM Hearing Guide independently of the scene. See [courtroom instructions](features/courtroom/README.md). Open **Shared evidence library** to prepare private evidence drafts, publish player-readable snapshots and place discovered artwork with journal links on the investigation board. If an older development build placed board art incorrectly, use **Repair board alignment** in the Shared Evidence Library to realign existing managed images and reduce pin size without changing journals. New tiles use explicit top-left anchors for v14. For old court exhibits, re-present; for chase, initialize/repair; cast geometry edits preserve the visible position of legacy anchored tiles. Open **Exhibit control** in the Director to present the same published evidence, admit numbered exhibits and maintain a private trial register. Open **Cast & witnesses** in the Director to stage GM-supplied counsel and witnesses using image tiles, adjustable positions and spotlight cues. Open **Chase Director** beside an imported chase scene for configurable chase points, obstacle covers, independent party/drone markers and round tracking. See [chase instructions](features/chase/README.md). Courtroom ambience remains in development. No automatic scene imports or macros are created on world load. The dashboard and importer target Foundry v14, but have not yet been run in a live Foundry/Forge world.
 
+## Portable configuration
+
+Open **Configuration Import / Export** in Adventure Manager. See [portable configuration instructions](docs/CONFIGURATION.md). Private campaign JSON and licensed adventure material must remain outside this public repository.
+
 ## Development and installation
 
 **Development manifest (test worlds only):**
