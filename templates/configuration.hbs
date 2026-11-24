@@ -14,21 +14,23 @@
   </section>
   <section class="gg-mimc-cue-group gg-mimc-evidence-fields">
     <h2>Import configuration</h2>
-    <label>Configuration file<input type="file" accept=".json,application/json" name="file"></label>
+    <label>Configuration JSON or preparation ZIP<input type="file" accept=".json,.zip,application/json,application/zip" name="file"></label>
     <label>Or paste configuration JSON<textarea name="pasted" rows="4" spellcheck="false" placeholder="Paste exported private JSON here"></textarea></label>
     <div class="gg-mimc-actions"><button type="button" data-action="loadPasted">Load pasted JSON</button></div>
     {{#if filename}}<p>Selected: <strong>{{filename}}</strong></p>{{/if}}
+    {{#if packageCount}}<aside class="gg-mimc-notice">{{packageCount}} bundled images validated. They will be uploaded only when you apply the configuration. Uploaded files may be directly accessible by URL; keep asset links private.</aside>{{/if}}
     <label>Asset path replacements (JSON object; optional)<textarea name="mapping" rows="3">{{mapping}}</textarea></label>
     <p>Upload your custom artwork to Forge first. Map old paths to new paths, e.g. {"worlds/local/art/npc.png":"your-forge-asset-path/npc.png"}. Included module assets retain their original paths.</p>
     <div class="gg-mimc-actions"><button type="button" data-action="preview">Validate &amp; preview</button></div>
     {{#if preview}}
     <div data-preview-status>Preview: {{preview.data.mode}} — {{preview.summary.scenes}} scenes, {{preview.summary.drafts}} drafts, {{preview.summary.published}} public snapshots, {{preview.summary.officials}} court journals, {{preview.summary.assets}} referenced assets.</div>
-    {{#if preview.missing.length}}<aside class="gg-mimc-notice"><strong>Missing assets — import blocked</strong>{{#each preview.missing}}<p>{{path}}</p>{{/each}}</aside>{{else}}<p>Referenced images loaded successfully on this GM client.</p>{{/if}}
+    {{#if preview.missing.length}}<aside class="gg-mimc-notice"><strong>Missing assets — import blocked</strong>{{#each preview.missing}}<p>{{path}}</p>{{/each}}</aside>{{else}}<p>External referenced images loaded successfully on this GM client. Bundled images will be checked after upload.</p>{{/if}}
     {{#if preview.conflicts.length}}<div><strong>Existing destination items</strong>{{#each preview.conflicts}}<p>{{this}}</p>{{/each}}</div>{{/if}}
     <div class="gg-mimc-config-checks">
       <label><input type="checkbox" name="replace" {{#if replace}}checked{{/if}}> Apply imported settings to existing managed items (otherwise merge missing only)</label>
       <label><input type="checkbox" name="confirmReplace"> I understand managed settings and matching private journal content may be updated</label>
       {{#if campaign}}<label><input type="checkbox" name="progress" {{#if progress}}checked{{/if}}> Restore campaign progress, including making exported public snapshots player-readable</label>{{/if}}
+      {{#if packageCount}}<label><input type="checkbox" name="confirmAssets"> I authorize upload of the included custom artwork to the destination asset library</label>{{/if}}
       <label><input type="checkbox" name="confirm"> I have backed up this world, reviewed the preview and understand import is not transactional</label>
     </div>
     <div class="gg-mimc-actions"><button type="button" data-action="apply" {{#unless canApply}}disabled{{/unless}}><i class="fa-solid fa-file-import"></i> Apply configuration</button></div>

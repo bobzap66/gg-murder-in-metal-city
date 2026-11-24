@@ -1,3 +1,5 @@
+import {parsePackage,uploadPackageAssets,PACKAGE_LIMIT} from "./configuration-package.mjs";
+import {loadEvidenceCatalog} from "../features/investigation/library.mjs";
 import {ROOT,FEATURES} from "./features.mjs";
 import {MAX_BYTES} from "./configuration-format.mjs";
 import {exportConfiguration,previewConfiguration,importConfiguration} from "./configuration.mjs";
@@ -14,10 +16,10 @@ function download(text,filename){
 class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2){
   static DEFAULT_OPTIONS={id:"gg-mimc-configuration",classes:["gg-mimc-window"],window:{title:"Greene Gaming — Portable Configuration",resizable:true},position:{width:760,height:720},actions:{export:ConfigurationApp.exportAction,preview:ConfigurationApp.previewAction,apply:ConfigurationApp.applyAction,saveFile:ConfigurationApp.saveFileAction,copyJSON:ConfigurationApp.copyAction,selectJSON:ConfigurationApp.selectAction,loadPasted:ConfigurationApp.pasteAction}};
   static PARTS={body:{template:ROOT+"templates/configuration.hbs"}};
-  _busy=false;_exportText="";_exportName="";_raw=null;_preview=null;_filename="";_mapping="{}";_log=[];_mode="preparation";_features=new Set(FEATURES.map(f=>f.id));_macros=true;_replace=false;_progress=false;
+  _busy=false;_package=null;_exportText="";_exportName="";_raw=null;_preview=null;_filename="";_mapping="{}";_log=[];_mode="preparation";_features=new Set(FEATURES.map(f=>f.id));_macros=true;_replace=false;_progress=false;
   _canRender(options){return game.user?.isGM&&super._canRender(options);}
   async _prepareContext(options){
-    requireGM();return {...await super._prepareContext(options),features:FEATURES.map(f=>({...f,selected:this._features.has(f.id)})),modes:[{id:"setup",name:"Setup and configuration"},{id:"preparation",name:"Adventure preparation"},{id:"campaign",name:"Campaign state"}].map(m=>({...m,selected:m.id===this._mode})),macros:this._macros,exportText:this._exportText,exportName:this._exportName,filename:this._filename,mapping:this._mapping,preview:this._preview,canApply:!!this._preview&&!this._preview.missing.length,campaign:this._preview?.data.mode==="campaign",replace:this._replace,progress:this._progress,log:this._log};
+    requireGM();return {...await super._prepareContext(options),features:FEATURES.map(f=>({...f,selected:this._features.has(f.id)})),modes:[{id:"setup",name:"Setup and configuration"},{id:"preparation",name:"Adventure preparation"},{id:"campaign",name:"Campaign state"}].map(m=>({...m,selected:m.id===this._mode})),macros:this._macros,exportText:this._exportText,exportName:this._exportName,filename:this._filename,mapping:this._mapping,preview:this._preview,packageCount:this._package?.assets.length??0,canApply:!!this._preview&&!this._preview.missing.length,campaign:this._preview?.data.mode==="campaign",replace:this._replace,progress:this._progress,log:this._log};
   }
   field(name){return this.element.querySelector('[name="'+name+'"]');}
   invalidate(){this._preview=null;this._progress=false;this._log=[];if(this.rendered)this.render();}
@@ -28,10 +30,13 @@ class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2){
     for(const b of this.element.querySelectorAll("[data-feature]"))b.addEventListener("change",()=>b.checked?this._features.add(b.dataset.feature):this._features.delete(b.dataset.feature));
     this.field("file")?.addEventListener("change",async e=>{
       try{
-        const f=e.target.files?.[0];this._raw=null;this._filename="";this._preview=null;this._progress=false;this._log=[];
+        const f=e.target.files?.[0];this._package=null;this._raw=null;this._filename="";this._preview=null;this._progress=false;this._log=[];
         if(!f)return;
-        if(f.size>MAX_BYTES)throw Error("Configuration exceeds 8 MB.");
-        this._raw=JSON.parse(await f.text());this._filename=f.name;
+        if(/\.zip$/i.test(f.name)){
+          if(f.size>PACKAGE_LIMIT)throw Error("ZIP exceeds 80 MB.");
+          this._package=await parsePackage(await f.arrayBuffer(),await loadEvidenceCatalog());this._raw=this._package.config;
+        }else{if(f.size>MAX_BYTES)throw Error("Configuration exceeds 8 MB.");this._raw=JSON.parse(await f.text());}
+        this._filename=f.name;
       }catch(err){ui.notifications.error(err.message);}finally{if(this.rendered)await this.render();}
     });
     this.field("mapping")?.addEventListener("input",e=>{
@@ -76,23 +81,25 @@ class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2){
   static async pasteAction(){
     const value=this.field("pasted")?.value??"";
     await this.run(async()=>{
-      this._raw=null;this._filename="";this._preview=null;this._progress=false;this._log=[];
+      this._package=null;this._raw=null;this._filename="";this._preview=null;this._progress=false;this._log=[];
       if(new Blob([value]).size>MAX_BYTES)throw Error("Configuration exceeds 8 MB.");
       this._raw=JSON.parse(value);this._filename="Pasted JSON";
       ui.notifications.info("Pasted JSON loaded. Validate & preview before applying.");
     });
   }
   async _onClose(options){
-    this._exportText="";this._exportName="";this._raw=null;this._preview=null;this._filename="";this._mapping="{}";this._log=[];this._progress=false;
+    this._exportText="";this._exportName="";this._package=null;this._raw=null;this._preview=null;this._filename="";this._mapping="{}";this._log=[];this._progress=false;
     await super._onClose(options);
   }
-  static async previewAction(){await this.run(async()=>{if(!this._raw)throw Error("Choose a configuration JSON file first.");this._preview=null;this._progress=false;this._preview=await previewConfiguration(this._raw,JSON.parse(this._mapping||"{}"));});}
+  static async previewAction(){await this.run(async()=>{if(!this._raw)throw Error("Choose a configuration JSON file first.");this._preview=null;this._progress=false;this._preview=await previewConfiguration(this._raw,JSON.parse(this._mapping||"{}"),this._package?.assets.map(a=>a.path)??[]);});}
   static async applyAction(){await this.run(async()=>{
     if(!this._preview||this._preview.missing.length)throw Error("Preview and resolve missing assets first.");
     if(!this.field("confirm")?.checked)throw Error("Confirm you have backed up the destination world and reviewed the preview.");
     if(this._replace&&!this.field("confirmReplace")?.checked)throw Error("Confirm managed replacement.");
     const opts={mapping:JSON.parse(this._mapping||"{}"),replace:this._replace,restoreProgress:this._progress};
+    if(this._package?.assets.length&&!this.field("confirmAssets")?.checked)throw Error("Confirm custom asset uploads before importing.");
     this._preview=null;
+    if(this._package?.assets.length){ui.notifications.info("Uploading packaged artwork to the destination asset library.");opts.mapping=await uploadPackageAssets(this._package,opts.mapping);this._mapping=JSON.stringify(opts.mapping,null,2);}
     this._log=await importConfiguration(this._raw,opts);
     ui.notifications.info("Configuration applied. Refresh open feature panels.");
   });}

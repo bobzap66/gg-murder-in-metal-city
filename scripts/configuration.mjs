@@ -100,10 +100,10 @@ async function probeImage(src){
     i.onload=()=>done(true);i.onerror=()=>done(false);i.src=src;
   });
 }
-export async function previewConfiguration(raw,mapping={}){
+export async function previewConfiguration(raw,mapping={},bundled=[]){
   requireGM();const catalog=await loadEvidenceCatalog();
   const data=validateConfiguration(remapAssets(validateConfiguration(raw,catalog),mapping),catalog);
-  const checks=[],paths=assetPaths(data);
+  const checks=[],allPaths=assetPaths(data),pending=new Set(bundled),paths=allPaths.filter(path=>!pending.has(path));
   for(let i=0;i<paths.length;i+=12)checks.push(...await Promise.all(paths.slice(i,i+12).map(probeImage)));
   const conflicts=[];
   for(const s of data.scenes){const existing=sceneFor(s.feature);if(existing)conflicts.push("Existing scene: "+existing.name+" — merge fills missing items; replacement updates selected managed settings.");}
@@ -124,7 +124,7 @@ export async function previewConfiguration(raw,mapping={}){
     const existing=sceneFor("courtroom"),trial=existing&&trialJournal(existing);
     if(trial&&!privateJournal(trial))throw Error("Existing trial record is not private.");
   }
-  return {data,checks,missing:checks.filter(a=>!a.ok),conflicts,summary:{scenes:data.scenes.length,drafts:data.drafts.length,published:data.drafts.filter(d=>d.published).length,officials:data.officials.length,assets:paths.length}};
+  return {data,checks,missing:checks.filter(a=>!a.ok),conflicts,summary:{scenes:data.scenes.length,drafts:data.drafts.length,published:data.drafts.filter(d=>d.published).length,officials:data.officials.length,assets:allPaths.length}};
 }
 let importing=false;
 async function importOfficial(j,replace){

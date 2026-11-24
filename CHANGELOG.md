@@ -20,4 +20,5 @@
 - Portable versioned JSON configuration export, validated preview, image path remapping and GM-only merge/import for scene setup, court, investigation and chase; explicit opt-in for published campaign state.
 - Dedicated square Cast & Witnesses shortcut icon; GM-ready migration updates only module-installed shortcuts still using the original desk overlay icon.
 - Desktop-friendly JSON export: named, selectable text, copy, explicit save/download with accurate notifications, and paste-to-import; generated contents remain in GM panel memory until closed.
+- Preparation ZIP imports: validated archive layout, CRC and size checks, raster image-only assets, explicit GM upload confirmation, native FilePicker uploads with automatic destination path mapping. JSON export remains unchanged.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.
