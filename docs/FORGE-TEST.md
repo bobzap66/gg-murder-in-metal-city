@@ -1,8 +1,10 @@
 # Forge development smoke test
 
-Status: development only, not a public release. Baseline build: `15e2f8bab691e5efdc85371acc22c5c0c9be03b3` (v0.1.0). Automated checks passed; no live Foundry/Forge verification yet.
+Status: public development packages for private testing, not a stable release. Baseline build: `15e2f8bab691e5efdc85371acc22c5c0c9be03b3` (v0.1.0). Automated checks passed; no live Foundry/Forge verification yet.
 
 ## Installation
+
+Preferred: The Forge Bazaar → Custom Module → paste `https://raw.githubusercontent.com/bobzap66/gg-murder-in-metal-city/dev-release/module.json` → install. Check for updates through the custom module package management interface after a successful build. Stop/reload the test world as required. Existing world documents use the same module ID; back up before upgrading. If the manifest installation fails, use the ZIP fallback below.
 
 1. Sign into GitHub and download the [foundry-module artifact](https://github.com/bobzap66/gg-murder-in-metal-city/actions/runs/45467990086/artifacts/14955309113). Artifacts expire; if unavailable, use the latest successful build on main or build locally with `python3 tools/build.py`.
 2. Extract the outer archive. Upload the inner `module.zip` using The Forge's Import Wizard. Choose custom module rather than Bazaar installation if offered. Do not upload the outer archive. If necessary, use Local Folder with the extracted module folder containing module.json.
@@ -50,4 +52,4 @@ Forge import guidance: https://forums.forge-vtt.com/t/how-to-export-worlds-and-c
 ### Phase E — report
 Record Foundry exact build, SF2e version, browser, Forge import method, expected/actual behavior and screenshot or copied console stack trace. Check browser developer console (F12 on desktop); redact tokens, signed URLs and private campaign details. Test with only this module and required system initially. Re-enable other modules afterward to identify conflicts.
 
-Stop on permission leaks, cross-scene edits, missing assets, or module loading errors. Do not move to the production campaign until those issues are corrected. No public release or manifest installation is available yet.
+Stop on permission leaks, cross-scene edits, missing assets, or module loading errors. Do not move to the production campaign until those issues are corrected. No stable release is available yet.

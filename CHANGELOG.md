@@ -12,4 +12,5 @@
 - Courtroom exhibit controller reuses published evidence artwork and journals, with screen tiles, optional lighting, stable exhibit numbering, admission tracking, configurable target and private trial register.
 - Courtroom cast controls: three adjustable image-tile stations, native asset picker, world actor artwork selection, mirror, spotlight and dismissal without modifying actors.
 - Chase Director with eight obstacle covers, manual chase-point targets and adjustments, independent party/drone movement, round tracking, persistent scene state and overlay repair.
+- Versioned development manifest channel and automated publication after passing main builds; stable releases remain draft-only.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

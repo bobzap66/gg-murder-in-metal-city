@@ -21,9 +21,13 @@ The courtroom includes the matching foreground image on the main v14 Level. Open
 
 ## Development and installation
 
-The current manifest is a scaffold, not a public installation link. For local development, build with `python3 tools/build.py`, extract `dist/module.zip` into `Data/modules/gg-murder-in-metal-city/`, restart Foundry and enable the module in a test world. The archive has `module.json` at its root. Do not install this over an existing module of the same ID without a backup.
+**Development manifest (test worlds only):**
 
-GitHub Actions validates and builds the scaffold on pushes to main and pull requests. An explicit `vX.Y.Z` tag matching the manifest version creates a draft release. Review all release assets and rights before manually publishing. No release will be made automatically public. If development uses a private repository, its releases are not publicly installable through Forge.
+`https://raw.githubusercontent.com/bobzap66/gg-murder-in-metal-city/dev-release/module.json`
+
+Install via The Forge Bazaar's Custom Module manifest URL field. Check for custom package updates after a successful main build. The development channel uses the same module ID as the future stable channel, and each version has a unique ZIP. Do not install both simultaneously. Development builds use numeric patch versions `0.1.N` where N is the CI run number; reserve a later minor version for the first stable release. For local development, build with `python3 tools/build.py`, extract `dist/module.zip` into `Data/modules/gg-murder-in-metal-city/`, restart Foundry and enable the module in a test world. The archive has `module.json` at its root. Do not install this over an existing module of the same ID without a backup.
+
+GitHub Actions validates and builds the scaffold on pushes to main and pull requests. An explicit `vX.Y.Z` tag matching the manifest version creates a draft release. Review all release assets and rights before manually publishing. Successful pushes to main also publish publicly accessible development packages to the separate `dev-release` branch. Stable releases still require deliberate publication. The development channel is not listed in the official package directory or Bazaar. Do not redistribute packages or add third-party content pending rights review.
 
 Planned public manifest (not live):
 `https://github.com/bobzap66/gg-murder-in-metal-city/releases/latest/download/module.json`

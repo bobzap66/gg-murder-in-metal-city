@@ -48,3 +48,47 @@ jobs:
           VERSION=$(python3 -c 'import json; print(json.load(open("dist/module.json"))["version"])')
           test "$TAG" = "v$VERSION"
           gh release create "$TAG" dist/module.json dist/module.zip --verify-tag --draft --title "$TAG" --notes "Development build. Review compatibility, content rights and licensing before publishing."
+
+  publish-development:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: gg-mimc-dev-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build versioned development package
+        run: python3 tools/build.py --dev-run "$GITHUB_RUN_NUMBER" --repository "$GITHUB_REPOSITORY"
+      - name: Publish manifest and immutable versioned ZIP together
+        run: |
+          set -euo pipefail
+          VERSION=$(python3 -c 'import json; print(json.load(open("dist/module.json"))["version"])')
+          WORK="$RUNNER_TEMP/gg-mimc-dev"
+          if git ls-remote --exit-code --heads origin dev-release >/dev/null; then
+            git fetch origin refs/heads/dev-release:refs/remotes/origin/dev-release
+            git worktree add --detach "$WORK" refs/remotes/origin/dev-release
+          else
+            git worktree add --detach "$WORK" HEAD
+            git -C "$WORK" switch --orphan dev-release
+          fi
+          if [ -f "$WORK/build.json" ]; then
+            OLD=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["run"])' "$WORK/build.json")
+            if [ "$OLD" -ge "$GITHUB_RUN_NUMBER" ]; then
+              echo "A same or newer development build is already published."
+              exit 0
+            fi
+          fi
+          test ! -e "$WORK/packages/$VERSION"
+          mkdir -p "$WORK/packages/$VERSION"
+          cp dist/module.zip "$WORK/packages/$VERSION/module.zip"
+          cp dist/module.json "$WORK/packages/$VERSION/module.json"
+          cp dist/module.json "$WORK/module.json"
+          python3 -c 'import json,sys; print(json.dumps({"run":int(sys.argv[1]),"source":sys.argv[2],"version":sys.argv[3]},indent=2))' "$GITHUB_RUN_NUMBER" "$GITHUB_SHA" "$VERSION" > "$WORK/build.json"
+          git -C "$WORK" config user.name "github-actions[bot]"
+          git -C "$WORK" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$WORK" add module.json build.json "packages/$VERSION"
+          git -C "$WORK" commit -m "Publish development $VERSION from $GITHUB_SHA"
+          git -C "$WORK" push origin HEAD:refs/heads/dev-release
