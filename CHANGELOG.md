@@ -10,4 +10,5 @@
 - Eight original court official journals and GM Hearing Guide; private-by-default, missing-only imports, portraits and character cards, roster and current-speaker journal shortcuts.
 - Shared evidence library with private drafts, explicit player-readable journal snapshots, withdrawal, eleven board slots, native journal pins and replaceable subject portrait/name.
 - Courtroom exhibit controller reuses published evidence artwork and journals, with screen tiles, optional lighting, stable exhibit numbering, admission tracking, configurable target and private trial register.
+- Courtroom cast controls: three adjustable image-tile stations, native asset picker, world actor artwork selection, mirror, spotlight and dismissal without modifying actors.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

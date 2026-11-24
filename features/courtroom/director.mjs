@@ -1,3 +1,4 @@
+import {openCourtCast} from "./cast.mjs";
 import {openCourtExhibits} from "./exhibits.mjs";
 import {openCourtRoster,openCourtJournal} from "./roster.mjs";
 import {PROFILES} from "./profiles.mjs";
@@ -60,7 +61,7 @@ export async function applyCourtCue(sceneId,id){
   });
 }
 export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
-  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Director",resizable:true},position:{width:435,height:650},actions:{cue:CourtDirector.cueAction,install:CourtDirector.installAction,view:CourtDirector.viewAction,refresh:CourtDirector.refreshAction,roster:CourtDirector.rosterAction,profile:CourtDirector.profileAction,exhibits:CourtDirector.exhibitAction}};
+  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Director",resizable:true},position:{width:435,height:650},actions:{cue:CourtDirector.cueAction,install:CourtDirector.installAction,view:CourtDirector.viewAction,refresh:CourtDirector.refreshAction,roster:CourtDirector.rosterAction,profile:CourtDirector.profileAction,exhibits:CourtDirector.exhibitAction,cast:CourtDirector.castAction}};
   static PARTS={body:{template:ROOT+"templates/court-director.hbs"}};
   constructor(sceneId){super({id:"gg-mimc-director-"+sceneId});this.sceneId=sceneId;}
   _busy=false;
@@ -88,6 +89,7 @@ export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
   static async rosterAction(){await this.run(()=>openCourtRoster());}
   static async profileAction(event,target){await this.run(()=>openCourtJournal(target.dataset.profile));}
   static async exhibitAction(){await this.run(()=>openCourtExhibits(this.sceneId));}
+  static async castAction(){await this.run(()=>openCourtCast(this.sceneId));}
   static async refreshAction(){requireGM();if(!this._busy)await this.render();}
   async _onClose(options){directors.delete(this.sceneId);await super._onClose(options);}
 }

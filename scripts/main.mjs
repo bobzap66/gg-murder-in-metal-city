@@ -1,3 +1,4 @@
+import {openCourtCast} from "../features/courtroom/cast.mjs";
 import {openCourtExhibits} from "../features/courtroom/exhibits.mjs";
 import {openEvidenceManager} from "../features/investigation/library.mjs";
 import {openCourtRoster,importCourtJournals} from "../features/courtroom/roster.mjs";
@@ -21,6 +22,7 @@ Hooks.once("ready",()=>{
     openEvidenceManager,
     openCourtDirector,
     openCourtExhibits,
+    openCourtCast,
     openCourtRoster,
     importCourtJournals,
     openManager:async()=>{

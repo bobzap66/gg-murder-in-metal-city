@@ -10,7 +10,7 @@ The default spotlight radius and intensity are starting values, not yet verified
 
 GM macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtDirector();` (selects the viewed tagged courtroom or the only imported courtroom). Pass a scene ID explicitly if necessary.
 
-Counsel placement and ambience are not included in this step. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
+Ambience remains to be implemented. Prosecution and defense cues use neutral labels to accommodate GM-supplied characters.
 
 ## GM journals and court roster
 
@@ -33,3 +33,15 @@ Withdrawing evidence publication in the shared library removes all managed tiles
 Macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtExhibits();`
 
 Live test: publish evidence, place on board, present in court, inspect as player, admit, clear, present again, withdraw admission, withdraw publication, refresh record and verify all placements are removed. Check the display geometry, lighting and journal permissions on The Forge.
+
+## Counsel and witness placement
+
+Open **Cast & witnesses** from the Director. Choose Prosecution, Defense or Witness platform. Enter a display name and select artwork through Foundry's native image picker (including Forge assets), paste an accessible image path, or copy the token/portrait image from an existing world actor. Full-body transparent PNG or WebP images are recommended. The module does not bundle published-character artwork and does not create or change actors, tokens, ownership, statistics or combatants.
+
+Adjust the horizontal center, bottom baseline and height as percentages of the scene rectangle; artwork is aspect-fitted and clamped inside the scene. Mirror reverses the image horizontally. Default position restores the station's recommended geometry without changing the selected name or artwork. Place / update creates or updates the single managed tile for that station. A failed image load leaves an existing character untouched. The original desk foreground should occlude the lower part of counsel artwork; verify layer ordering and placement in a live v14 world. Existing geometry is read from the tile when the editor opens. For transparent images with large empty margins, crop the source or adjust the station geometry.
+
+Dismiss deletes only the tagged station tile(s), leaving the original scene and actor unchanged. Spotlight invokes the corresponding courtroom lighting cue; optional focus on placement does the same. Dismiss does not alter the current lighting cue; select another cue or Reset when ready. The next witness can be placed directly over the previous witness or after dismissal. No hidden witness tiles or private roster are stored on the public scene; any placed image and name are visible to scene viewers. Save before switching stations or refreshing; the editor is not a persistent witness queue. Use a single GM client.
+
+Macro: `await game.modules.get("gg-murder-in-metal-city").api.openCourtCast();`
+
+Live test: place both counsel, select a witness, verify aspect ratio and foreground occlusion as a player, mirror and resize, spotlight, replace witness, dismiss, confirm unrelated tiles and actors are unchanged. Test Forge's asset picker and URL loading.

@@ -1,0 +1,25 @@
+<section class="gg-mimc-director gg-mimc-cast">
+  <header class="gg-mimc-director-head"><div class="gg-mimc-eyebrow">MACHINE COURT · CAST &amp; WITNESSES</div><h2>{{sceneName}}</h2><p>Stage counsel and witnesses using your own character artwork.</p></header>
+  <div class="gg-mimc-cast-stations">
+    {{#each stations}}<article class="gg-mimc-record {{#if selected}}is-selected{{/if}}">
+      <h3>{{label}}</h3><strong>{{occupant}}</strong>{{#if duplicates}}<small>Multiple managed tiles; placement repairs duplicates.</small>{{/if}}
+      <div class="gg-mimc-actions"><button type="button" data-action="selectStation" data-station="{{id}}" aria-pressed="{{#if selected}}true{{else}}false{{/if}}">Edit</button>{{#if occupied}}<button type="button" data-action="focus" data-station="{{id}}">Spotlight</button><button type="button" data-action="dismiss" data-station="{{id}}">Dismiss</button>{{/if}}</div>
+    </article>{{/each}}
+  </div>
+  <section class="gg-mimc-cue-group gg-mimc-evidence-fields">
+    <h3>{{selected.label}} — placement</h3>
+    <label>Display name<input name="name" maxlength="100" value="{{form.name}}" placeholder="Character name"></label>
+    <label>Artwork path<file-picker name="image" type="image" value="{{form.image}}"></file-picker></label>
+    <label>Or choose an existing world actor<select name="actorId"><option value="">Select actor</option>{{#each actors}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
+    <div class="gg-mimc-actions"><button type="button" data-action="actor" data-art="token">Use token artwork</button><button type="button" data-action="actor" data-art="portrait">Use portrait</button></div>
+    <div class="gg-mimc-cast-geometry">
+      <label>Horizontal center (%)<input type="number" name="center" min="0" max="100" step="0.1" value="{{form.center}}"></label>
+      <label>Bottom baseline (%)<input type="number" name="baseline" min="0" max="100" step="0.1" value="{{form.baseline}}"></label>
+      <label>Height (% of scene)<input type="number" name="height" min="5" max="85" step="0.1" value="{{form.height}}"></label>
+    </div>
+    <label class="gg-mimc-inline-check"><input type="checkbox" name="mirror" {{#if form.mirror}}checked{{/if}}> Mirror horizontally</label>
+    <label class="gg-mimc-inline-check"><input type="checkbox" name="lighting" {{#if lighting}}checked{{/if}}> Spotlight after placement</label>
+    <div class="gg-mimc-actions"><button type="button" data-action="place"><i class="fa-solid fa-user-plus"></i> Place / update character</button><button type="button" data-action="defaults">Default position</button><button type="button" data-action="refresh">Refresh</button></div>
+  </section>
+  <p class="gg-mimc-legal">Characters are visible image tiles, not linked actors. Transparent full-body artwork works best. Placement or dismissal affects all viewers. Save before switching stations. No hidden witness queue is stored on the scene; select the next witness when ready.</p>
+</section>

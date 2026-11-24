@@ -6,7 +6,8 @@
 - [x] Implement courtroom director and lighting cue controls.
 - [x] Add eight courtroom NPC journals, GM Hearing Guide, and roster integration.
 - [x] Add courtroom exhibit presentation and admission register.
-- [ ] Add counsel placement and ambience.
+- [x] Add counsel and witness placement controls.
+- [ ] Add courtroom ambience and interactive chase controls.
 - [ ] Verify lighting, scene setup and version 14 APIs in Foundry and The Forge.
 - [x] Implement reusable investigation evidence model, private drafts, published snapshots and board placement.
 - [x] Connect shared published evidence to courtroom exhibit controls.

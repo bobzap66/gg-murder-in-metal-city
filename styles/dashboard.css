@@ -55,3 +55,10 @@
 .gg-mimc-display-state strong{font-size:1.12rem;color:#81e8f5}
 .gg-mimc-exhibits .gg-mimc-inline-check{display:flex;flex-direction:row;align-items:center;gap:8px}
 .gg-mimc-exhibits .gg-mimc-inline-check input{width:auto}
+
+.gg-mimc-cast-stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}
+.gg-mimc-cast-stations .gg-mimc-record{margin:0}
+.gg-mimc-cast-geometry{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gg-mimc-cast .gg-mimc-inline-check{display:flex;flex-direction:row;align-items:center;gap:8px}
+.gg-mimc-cast .gg-mimc-inline-check input{width:auto}
+.gg-mimc-cast file-picker{width:100%;min-width:0}
