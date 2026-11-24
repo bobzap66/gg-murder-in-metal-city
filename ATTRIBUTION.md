@@ -32,3 +32,10 @@ All 18 files are in `assets/courtroom/`. Scene and overlay retain matching 1672 
 AI generation is disclosed; these assets have been selected for development, not legally certified for redistribution. Final software and content licensing and applicable compatibility notices are pending. Do not redistribute until terms are finalized.
 
 Artwork depicting published characters Hesop and Prime-Facilitator and campaign-specific evidence are intentionally excluded pending review. No official adventure text, handouts, published illustrations, or stat blocks are included.
+
+## Chase — unbranded artwork
+
+- `assets/chase/chase-board-unbranded.webp`: original AI-generated chase board with the two game logos replaced by generated skyline details. Original 2172 × 724 layout and obstacle positions preserved. No printed chase-point values. Adventure location and obstacle labels remain descriptive references; review these against applicable permissions before release.
+- `assets/chase/chase-card-cover.webp`: original AI-generated unbranded card cover, converted to WebP with transparency retained (941 × 1672).
+
+The alternate board with preprinted chase-point values is retained separately for personal campaign use pending content review. No new brand marks have been added.
