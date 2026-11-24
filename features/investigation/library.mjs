@@ -1,6 +1,7 @@
+import {topLeftTexture,topLeftPatch} from "../../scripts/tile-geometry.mjs";
 import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
-import {DRAFT,PUBLIC,RECORD,PLACEMENT,normalizeDraft,publicRecord,journalData,publishedFor,isPublished,safeImage,rectPixels,fitImage,placementDocs} from "./records.mjs";
+import {DRAFT,PUBLIC,RECORD,PLACEMENT,normalizeDraft,publicRecord,journalData,publishedFor,isPublished,safeImage,rectPixels,fitImage,placementDocs,evidenceSlotGeometry} from "./records.mjs";
 import {renderEvidenceCard} from "./card.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 const DRAFT_FOLDER="Greene Gaming — Private Evidence Drafts";
@@ -101,13 +102,34 @@ async function placeEvidence(sceneId,slotId,journalId){
     if(!entry)throw new Error("Only published evidence can be placed.");
     const record=entry.getFlag(MODULE_ID,RECORD);
     if(!record)throw new Error("Published evidence record missing.");
-    const src=safeImage(record.image), size=await imageSize(src), box=rectPixels(slot,scene.getDimensions()), level=sceneLevel(scene);
-    const rect=fitImage({...box,width:Math.max(1,box.width-30)},size.width,size.height);
+    const src=safeImage(record.image), size=await imageSize(src), level=sceneLevel(scene);
+    const {rect,note}=evidenceSlotGeometry(slot,scene.getDimensions(),size.width,size.height);
     const flags={[MODULE_ID]:{[PLACEMENT]:{slot:slotId,journalId:entry.id}}};
     // Remove only module-managed items in this slot. Never place unrevealed content.
     await clearSlot(scene,slotId);
-    await scene.createEmbeddedDocuments("Tile",[{name:record.title,...rect,...level,texture:{src},locked:true,hidden:false,alpha:1,flags}]);
-    await scene.createEmbeddedDocuments("Note",[{x:box.x+box.width-13,y:box.y+Math.round(box.height/2),...level,entryId:entry.id,iconSize:30,texture:{src:"icons/svg/book.svg"},text:record.title,fontSize:16,textColor:"#c9f7ff",global:true,locked:true,flags}]);
+    await scene.createEmbeddedDocuments("Tile",[{name:record.title,...rect,...level,texture:topLeftTexture(src),locked:true,hidden:false,alpha:1,flags}]);
+    await scene.createEmbeddedDocuments("Note",[{...note,...level,entryId:entry.id,texture:{src:"icons/svg/book.svg"},text:record.title,textColor:"#c9f7ff",global:true,locked:true,flags}]);
+  });
+}
+async function repairBoard(sceneId){
+  return exclusive(async()=>{
+    const scene=assertBoard(sceneId),catalog=await loadEvidenceCatalog(),d=scene.getDimensions();
+    const tiles=[],notes=[];
+    for(const slot of catalog.board.slots){
+      const docs=placementDocs(scene,slot.id);
+      for(const tile of docs.tiles){
+        const {rect,note}=evidenceSlotGeometry(slot,d,tile.width,tile.height);
+        tiles.push({_id:tile.id,...topLeftPatch(rect)});
+        for(const n of docs.notes.filter(n=>n.getFlag(MODULE_ID,PLACEMENT)?.journalId===tile.getFlag(MODULE_ID,PLACEMENT)?.journalId))if(!notes.some(q=>q._id===n.id))notes.push({_id:n.id,...note});
+      }
+    }
+    for(const tile of placementDocs(scene,"subject").tiles){
+      const rect=fitImage(rectPixels(catalog.board.subjectPortrait,d),tile.width,tile.height);
+      tiles.push({_id:tile.id,...topLeftPatch(rect)});
+    }
+    if(tiles.length)await scene.updateEmbeddedDocuments("Tile",tiles);
+    if(notes.length)await scene.updateEmbeddedDocuments("Note",notes);
+    return tiles.length;
   });
 }
 async function removeSlot(sceneId,slotId){return exclusive(()=>clearSlot(assertBoard(sceneId),slotId));}
@@ -129,7 +151,7 @@ async function setSubject(sceneId,name,image){
   });
 }
 class EvidenceManager extends HandlebarsApplicationMixin(ApplicationV2){
-  static DEFAULT_OPTIONS={id:"gg-mimc-evidence-manager",classes:["gg-mimc-window"],window:{title:"Greene Gaming — Shared Evidence Library",resizable:true},position:{width:850,height:760},actions:{newDraft:EvidenceManager.newAction,editDraft:EvidenceManager.editAction,saveDraft:EvidenceManager.saveAction,publish:EvidenceManager.publishAction,withdraw:EvidenceManager.withdrawAction,openJournal:EvidenceManager.openAction,place:EvidenceManager.placeAction,remove:EvidenceManager.removeAction,subject:EvidenceManager.subjectAction,refresh:EvidenceManager.refreshAction}};
+  static DEFAULT_OPTIONS={id:"gg-mimc-evidence-manager",classes:["gg-mimc-window"],window:{title:"Greene Gaming — Shared Evidence Library",resizable:true},position:{width:850,height:760},actions:{newDraft:EvidenceManager.newAction,editDraft:EvidenceManager.editAction,saveDraft:EvidenceManager.saveAction,publish:EvidenceManager.publishAction,withdraw:EvidenceManager.withdrawAction,openJournal:EvidenceManager.openAction,place:EvidenceManager.placeAction,remove:EvidenceManager.removeAction,subject:EvidenceManager.subjectAction,refresh:EvidenceManager.refreshAction,repairBoard:EvidenceManager.repairAction}};
   static PARTS={body:{template:ROOT+"templates/evidence-manager.hbs"}};
   _id=null;_board=null;_busy=false;
   _canRender(options){return game.user?.isGM&&super._canRender(options);}
@@ -173,6 +195,7 @@ class EvidenceManager extends HandlebarsApplicationMixin(ApplicationV2){
   static async placeAction(){await this.run(()=>placeEvidence(this._board,this.value("slotId"),this.value("journalId")));}
   static async removeAction(){await this.run(()=>removeSlot(this._board,this.value("slotId")));}
   static async subjectAction(){await this.run(()=>setSubject(this._board,this.value("subjectName"),this.value("subjectImage")));}
+  static async repairAction(){await this.run(async()=>{const count=await repairBoard(this._board);ui.notifications.info("Realigned "+count+" managed board images. Published journals were not changed.");});}
   static async refreshAction(){requireGM();if(!this._busy)await this.render();}
 }
 export async function openEvidenceManager(sceneId){

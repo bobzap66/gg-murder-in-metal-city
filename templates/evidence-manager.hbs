@@ -12,7 +12,7 @@
     <section class="gg-mimc-cue-group gg-mimc-evidence-fields"><h3>{{#if editing}}Edit private draft{{else}}New private draft{{/if}}</h3>
       <label>Title<input name="title" maxlength="100" value="{{current.title}}"></label>
       <label>Template<select name="templateId">{{#each templates}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{title}}</option>{{/each}}</select></label>
-      <label>Custom artwork path (optional)<input name="image" value="{{current.image}}" placeholder="Foundry asset path or URL"></label>
+      <label>Custom artwork path (optional)<file-picker type="image" name="image" value="{{current.image}}"></file-picker></label>
       {{#each fields}}<label><span data-label="{{id}}">{{label}}</span><textarea name="{{id}}" rows="3">{{value}}</textarea></label>{{/each}}
       <label>GM notes — never published<textarea name="gmNotes" rows="4">{{current.gmNotes}}</textarea></label>
       <div class="gg-mimc-actions"><button type="button" data-action="saveDraft"><i class="fa-solid fa-floppy-disk"></i> Save private draft</button></div>
@@ -24,10 +24,11 @@
     <label>Evidence position<select name="slotId">{{#each slots}}<option value="{{id}}">{{label}}</option>{{/each}}</select></label>
     <label>Discovered evidence<select name="journalId"><option value="">Select published evidence</option>{{#each evidence}}<option value="{{id}}">{{title}}</option>{{/each}}</select></label>
     <div class="gg-mimc-actions"><button type="button" data-action="place">Place / replace selected slot</button><button type="button" data-action="remove">Clear selected slot</button></div>
-    <p>Placed artwork has a journal pin beside it. Players can also open discovered evidence through the Journal sidebar.</p>
+    <div class="gg-mimc-actions"><button type="button" data-action="repairBoard"><i class="fa-solid fa-wrench"></i> Repair board alignment</button></div>
+    <p>Artwork is fitted inside the frame with a small journal shortcut in the lower-right corner. Players can also open discovered evidence through the Journal sidebar.</p>
     <h3>Case subject (visible to all board viewers)</h3>
     <label>Subject name<input name="subjectName" maxlength="80" placeholder="Name shown on board"></label>
-    <label>Portrait path<input name="subjectImage" placeholder="Foundry image path or URL"></label>
+    <label>Portrait path<file-picker type="image" name="subjectImage"></file-picker></label>
     <div class="gg-mimc-actions"><button type="button" data-action="subject">Set / clear subject (blank clears)</button></div>
   {{else}}<p>Import the investigation base scene in Adventure Manager to place evidence.</p>{{/if}}
   </section>

@@ -1,3 +1,4 @@
+import {topLeftPatch} from "../../scripts/tile-geometry.mjs";
 import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {STATIONS,stationById,normalizeCast,stationTiles,stationForm,castTileData,adjustCastGeometry} from "./cast-layout.mjs";
@@ -100,7 +101,7 @@ class CourtCast extends HandlebarsApplicationMixin(ApplicationV2){
   async adjust(changes){
     await this.live(()=>exclusive(this.sceneId,async scene=>{
       const tile=this.selectedTile();if(!tile)throw new Error("Place a character first.");
-      await tile.update(adjustCastGeometry(this._station,tile,scene.getDimensions(),changes));
+      await tile.update(topLeftPatch(adjustCastGeometry(this._station,tile,scene.getDimensions(),changes)));
     }));
   }
   async adjustMirror(){

@@ -78,3 +78,6 @@
 .gg-mimc-window .gg-mimc-dpad button{color:#dffaff;background:#123847;border:1px solid #357b8d;border-radius:5px;padding:0}
 .gg-mimc-dpad .up{grid-column:2;grid-row:1}.gg-mimc-dpad .left{grid-column:1;grid-row:2}.gg-mimc-dpad .down{grid-column:2;grid-row:2}.gg-mimc-dpad .right{grid-column:3;grid-row:2}
 .gg-mimc-window .gg-mimc-dpad button:hover:not(:disabled){background:#205b6b;border-color:#5de5ef}
+
+.gg-mimc-evidence-manager .gg-mimc-cue-group h3{font:700 .95rem/1.3 inherit;font-family:inherit;font-size:.95rem;color:#bce4ed;margin:0 0 6px;border:0}
+.gg-mimc-evidence-manager file-picker{width:100%;min-width:0}

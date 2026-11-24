@@ -1,3 +1,4 @@
+import {topLeftTexture} from "../../scripts/tile-geometry.mjs";
 import {MODULE_ID,ROOT} from "../../scripts/features.mjs";
 import {rectPixels,fitImage} from "../investigation/records.mjs";
 export const CHASE="chaseState", OBJECT="chaseObject";
@@ -38,7 +39,7 @@ const flag=key=>({[MODULE_ID]:{[OBJECT]:key}});
 export function chaseObjects(state,d,levelId,elevation){
   if(!levelId||!Number.isFinite(elevation))throw new Error("Chase scene has no usable level.");
   const level={levels:[levelId],elevation},tiles=[],drawings=[];
-  const tile=(key,path,rect,sort)=>tiles.push({name:"Chase — "+key,...rect,...level,texture:{src:ROOT+art+path},sort,alpha:1,locked:true,hidden:false,flags:flag(key)});
+  const tile=(key,path,rect,sort)=>tiles.push({name:"Chase — "+key,...rect,...level,texture:topLeftTexture(ROOT+art+path),sort,alpha:1,locked:true,hidden:false,flags:flag(key)});
   const text=(key,label,rect,size,color)=>{const b=rectPixels(rect,d);drawings.push({x:b.x,y:b.y,...level,shape:{type:"r",width:b.width,height:b.height},text:label,fontSize:Math.max(12,Math.round(d.sceneHeight*size)),textColor:color,textAlpha:1,strokeWidth:0,strokeAlpha:0,fillType:1,fillColor:"#061524",fillAlpha:.9,locked:true,hidden:false,interface:true,sort:4000,flags:flag(key)});};
   for(const row of obstacleRows(state)){
     const i=row.index, panel=panelRect(i);

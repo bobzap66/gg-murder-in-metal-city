@@ -1,3 +1,4 @@
+import {topLeftTexture} from "../../scripts/tile-geometry.mjs";
 import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {availableEvidence,openEvidenceManager,exclusive as evidenceOperation} from "../investigation/library.mjs";
@@ -63,8 +64,8 @@ export async function presentExhibit(sceneId,journalId,{lighting=true}={}){
     await clearDisplay(scene);
     try{
       await scene.createEmbeddedDocuments("Tile",[
-        {name:"Exhibit display backing",...box,...level,sort:1000,texture:{src:ROOT+"assets/courtroom/exhibit-screen.svg"},locked:true,hidden:false,alpha:1,flags},
-        {name:"Exhibit "+e.number+" — "+e.title,...rect,...level,sort:1001,texture:{src},locked:true,hidden:false,alpha:1,flags:{[MODULE_ID]:{...flags[MODULE_ID],exhibitArt:true}}}
+        {name:"Exhibit display backing",...box,...level,sort:1000,texture:topLeftTexture(ROOT+"assets/courtroom/exhibit-screen.svg"),locked:true,hidden:false,alpha:1,flags},
+        {name:"Exhibit "+e.number+" — "+e.title,...rect,...level,sort:1001,texture:topLeftTexture(src),locked:true,hidden:false,alpha:1,flags:{[MODULE_ID]:{...flags[MODULE_ID],exhibitArt:true}}}
       ]);
       await scene.createEmbeddedDocuments("Note",[{x:box.x+box.width-15,y:box.y+Math.round(box.height/2),...level,entryId:journalId,iconSize:30,texture:{src:"icons/svg/book.svg"},text:"Exhibit "+e.number+" — "+e.title,fontSize:16,textColor:"#c9f7ff",global:true,flags}]);
       await saveRecord(entry,state);

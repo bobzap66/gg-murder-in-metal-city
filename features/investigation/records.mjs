@@ -53,3 +53,12 @@ export function placementDocs(scene,slot){
   const matches=d=>{const p=d.getFlag(MODULE_ID,PLACEMENT);return p&&p.slot===slot;};
   return {tiles:scene.tiles.contents.filter(matches),notes:scene.notes.contents.filter(matches)};
 }
+
+/** Fit art inside the frame, reserving a small right-hand journal shortcut. */
+export function evidenceSlotGeometry(slot,d,w,h){
+  const box=rectPixels(slot,d), inset=Math.max(3,Math.round(box.height*.055));
+  const iconSize=Math.max(12,Math.min(18,Math.round(box.height*.13)));
+  const reserve=iconSize+inset*2;
+  const rect=fitImage({x:box.x+inset,y:box.y+inset,width:Math.max(1,box.width-reserve-inset),height:Math.max(1,box.height-2*inset)},w,h);
+  return {rect,note:{x:box.x+box.width-inset-Math.round(iconSize/2),y:box.y+box.height-inset-Math.round(iconSize/2),iconSize,fontSize:12}};
+}

@@ -1,3 +1,4 @@
+import {topLeftTexture,tileTopLeft} from "../../scripts/tile-geometry.mjs";
 import {MODULE_ID} from "../../scripts/features.mjs";
 import {safeImage} from "../investigation/records.mjs";
 export const CAST_FLAG="courtCastStation";
@@ -38,12 +39,13 @@ const round=n=>Math.round(n*10)/10;
 export function stationForm(id,tile,d){
   const s=stationById(id);
   if(!tile)return {name:"",image:"",center:s.center,baseline:s.baseline,height:s.height,mirror:false};
-  return {name:tile.name,image:tile.texture.src,center:round(100*(tile.x+tile.width/2-d.sceneX)/d.sceneWidth),baseline:round(100*(tile.y+tile.height-d.sceneY)/d.sceneHeight),height:round(100*tile.height/d.sceneHeight),mirror:tile.texture.scaleX<0};
+  const origin=tileTopLeft(tile);
+  return {name:tile.name,image:tile.texture.src,center:round(100*(origin.x+tile.width/2-d.sceneX)/d.sceneWidth),baseline:round(100*(origin.y+tile.height-d.sceneY)/d.sceneHeight),height:round(100*tile.height/d.sceneHeight),mirror:tile.texture.scaleX<0};
 }
 export function castTileData(id,raw,d,w,h,levelId,elevation){
   if(!levelId||!Number.isFinite(elevation))throw new Error("Courtroom level unavailable.");
   const r=normalizeCast(id,raw);
-  return {name:r.name,...castRect(r,d,w,h),levels:[levelId],elevation,sort:2000,rotation:0,hidden:false,locked:true,alpha:1,texture:{src:r.image,scaleX:r.mirror?-1:1,scaleY:1},flags:{[MODULE_ID]:{[CAST_FLAG]:id}}};
+  return {name:r.name,...castRect(r,d,w,h),levels:[levelId],elevation,sort:2000,rotation:0,hidden:false,locked:true,alpha:1,texture:topLeftTexture(r.image,{scaleX:r.mirror?-1:1,scaleY:1}),flags:{[MODULE_ID]:{[CAST_FLAG]:id}}};
 }
 
 /** Adjust geometry only, retaining the original tile and its artwork. */
