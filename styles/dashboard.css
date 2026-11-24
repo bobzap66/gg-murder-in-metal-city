@@ -42,3 +42,11 @@
 .gg-mimc-roster-card{display:grid;grid-template-columns:80px minmax(0,1fr);gap:10px;padding:9px;background:#122a3a;border:1px solid #315064;border-radius:6px}
 .gg-mimc-roster-card img{width:80px;height:105px;object-fit:cover;border:1px solid #496d80;border-radius:4px}
 .gg-mimc-roster-card h3{font-size:.94rem;margin:0}.gg-mimc-roster-card p{font-size:.8rem;line-height:1.4;margin:4px 0 6px}.gg-mimc-roster-card small{color:#9eb4c6}
+
+.gg-mimc-evidence-layout{display:grid;grid-template-columns:minmax(190px,.85fr) minmax(0,1.15fr);gap:10px}
+.gg-mimc-evidence-fields{display:flex;flex-direction:column;gap:9px}
+.gg-mimc-evidence-fields label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:#bce4ed}
+.gg-mimc-evidence-fields input,.gg-mimc-evidence-fields textarea,.gg-mimc-evidence-fields select{width:100%;min-width:0;background:#081a29;color:#eafaff;border:1px solid #395b69;padding:5px;border-radius:4px}
+.gg-mimc-record{display:flex;flex-direction:column;gap:5px;border:1px solid #294d5e;padding:8px;margin:7px 0;border-radius:5px;background:#122a3a;overflow-wrap:anywhere}
+.gg-mimc-record.is-selected{border-color:#71e1ef}.gg-mimc-record small{color:#9eb4c6}
+@container (max-width:570px){.gg-mimc-evidence-layout{grid-template-columns:1fr}}

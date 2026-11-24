@@ -1,3 +1,4 @@
+import {openEvidenceManager} from "../features/investigation/library.mjs";
 import {openCourtRoster,importCourtJournals} from "../features/courtroom/roster.mjs";
 import {openCourtDirector} from "../features/courtroom/director.mjs";
 import {MODULE_ID} from "./features.mjs";
@@ -16,6 +17,7 @@ Hooks.once("init",()=>{
 Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
+    openEvidenceManager,
     openCourtDirector,
     openCourtRoster,
     importCourtJournals,

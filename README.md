@@ -1,6 +1,6 @@
 # Greene Gaming: Murder in Metal City Add-Ons
 
-Free, unofficial supplemental tools and cinematic scenes for Foundry VTT, targeting version 14. This is a development build. Base scene imports, the GM dashboard and Machine Court lighting controls are implemented; other interactive features remain in development.
+Free, unofficial supplemental tools and cinematic scenes for Foundry VTT, targeting version 14. This is a development build. Base scene imports, the GM dashboard and Machine Court lighting controls are implemented; shared evidence library and board placement are implemented; other interactive features remain in development.
 
 ## Planned features
 - Machine Court: original courtroom backdrop, original adjudicators, speaker lighting and exhibit presentation.
@@ -17,7 +17,7 @@ await game.modules.get("gg-murder-in-metal-city").api.openManager();
 
 Import each base scene independently. Imported scenes are tagged with the module ID and feature ID, stored in a dedicated Scene folder, and not activated or shown in player navigation automatically. Existing tagged scenes are never overwritten; View opens the scene for the requesting GM only. Refresh checks the current world documents. Imports are guarded on the current client; use one GM for installation to avoid concurrent imports from different clients. The evidence template library previews the twelve blank designs without exposing any campaign data.
 
-The courtroom includes the matching foreground image on the main v14 Level. Open **Director** beside an imported courtroom for speaker lighting, proceedings presets and reset. Open **Court officials** to import eight NPC journals and a GM Hearing Guide independently of the scene. See [courtroom instructions](features/courtroom/README.md). Counsel placement, exhibit display, evidence reveal and chase tracking are not yet implemented. No automatic scene imports or macros are created on world load. The dashboard and importer target Foundry v14, but have not yet been run in a live Foundry/Forge world.
+The courtroom includes the matching foreground image on the main v14 Level. Open **Director** beside an imported courtroom for speaker lighting, proceedings presets and reset. Open **Court officials** to import eight NPC journals and a GM Hearing Guide independently of the scene. See [courtroom instructions](features/courtroom/README.md). Open **Shared evidence library** to prepare private evidence drafts, publish player-readable snapshots and place discovered artwork with journal links on the investigation board. Counsel placement, courtroom exhibit display and chase tracking are not yet implemented. No automatic scene imports or macros are created on world load. The dashboard and importer target Foundry v14, but have not yet been run in a live Foundry/Forge world.
 
 ## Development and installation
 

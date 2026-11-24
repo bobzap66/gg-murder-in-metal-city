@@ -1,3 +1,4 @@
+import {openEvidenceManager} from "../features/investigation/library.mjs";
 import {openCourtRoster} from "../features/courtroom/roster.mjs";
 import {openCourtDirector} from "../features/courtroom/director.mjs";
 import {MODULE_ID, ROOT, FEATURES, findFeature, matchingScenes, makeSceneData} from "./features.mjs";
@@ -73,7 +74,8 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
       refresh:Dashboard.refreshAction,
       evidenceLibrary:Dashboard.libraryAction,
       courtDirector:Dashboard.courtAction,
-      courtRoster:Dashboard.rosterAction
+      courtRoster:Dashboard.rosterAction,
+      evidenceManager:Dashboard.evidenceAction
     }
   };
   static PARTS={body:{template:ROOT+"templates/dashboard.hbs"}};
@@ -84,7 +86,7 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
     requireGM();
     const features=FEATURES.map(f=>{
       const scenes=matchingScenes(game.scenes.contents,f.id);
-      return {...f,courtroom:f.id==="courtroom",image:ROOT+f.image,installed:scenes.length>0,scenes:scenes.map(s=>({id:s.id,name:s.name})),multiple:scenes.length>1};
+      return {...f,courtroom:f.id==="courtroom",investigation:f.id==="investigation",image:ROOT+f.image,installed:scenes.length>0,scenes:scenes.map(s=>({id:s.id,name:s.name})),multiple:scenes.length>1};
     });
     return {...await super._prepareContext(options),features,version:game.modules.get(MODULE_ID)?.version??"development",busy:this._busy};
   }
@@ -112,6 +114,7 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
   static async courtAction(event,target){await this.run(()=>openCourtDirector(target.dataset.scene));}
   static async rosterAction(){await this.run(()=>openCourtRoster());}
+  static async evidenceAction(event,target){await this.run(()=>openEvidenceManager(target.dataset.scene));}
   static async refreshAction(){requireGM();await this.render();}
   static async libraryAction(){
     await this.run(async()=>{

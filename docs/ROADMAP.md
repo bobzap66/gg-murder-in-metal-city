@@ -7,7 +7,8 @@
 - [x] Add eight courtroom NPC journals, GM Hearing Guide, and roster integration.
 - [ ] Add counsel placement, exhibit presentation and ambience.
 - [ ] Verify lighting, scene setup and version 14 APIs in Foundry and The Forge.
-- [ ] Recover existing investigation tracker and separate its generic data model, board layout and logic from adventure-specific clues.
+- [x] Implement reusable investigation evidence model, private drafts, published snapshots and board placement.
+- [ ] Connect shared published evidence to courtroom exhibit controls; verify player access in Forge.
 - [x] Implement independent base scene imports and documentation.
 - [ ] Audit all files and choose software/content distribution terms.
 - [ ] Publish first tested public release and manifest; document AI-assisted content.
