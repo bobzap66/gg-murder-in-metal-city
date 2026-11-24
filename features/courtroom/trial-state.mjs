@@ -3,6 +3,8 @@ export const TRIAL="courtTrial", SCREEN="court-exhibit";
 export const DISPLAY_RECT=Object.freeze({x:.338,y:.486,width:.324,height:.135});
 export function initialTrial(){return {version:1,target:0,next:1,exhibits:[],events:[]};}
 export function trialState(raw){return raw?.version===1?structuredClone(raw):initialTrial();}
+/** Reset proceedings without changing the configured target or recording a reset event. */
+export function resetTrialState(raw){return {...initialTrial(),target:trialState(raw).target};}
 export function recordEvent(state,action,entry=null,at=new Date().toISOString()){
   state.events.push({at,action,...(entry?{number:entry.number,title:entry.title,journalId:entry.journalId}:{})});
 }

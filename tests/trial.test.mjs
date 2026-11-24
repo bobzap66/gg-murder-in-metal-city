@@ -1,6 +1,6 @@
 import {test} from "node:test";
 import assert from "node:assert/strict";
-import {initialTrial,trialState,present,admission,setTarget,summary,trialHTML,recordEvent,DISPLAY_RECT} from "../features/courtroom/trial-state.mjs";
+import {initialTrial,trialState,resetTrialState,present,admission,setTarget,summary,trialHTML,recordEvent,DISPLAY_RECT} from "../features/courtroom/trial-state.mjs";
 test("numbering persists for a snapshot, revised publication gets new number",()=>{
   const s=initialTrial();
   assert.equal(present(s,"one","First").number,1);
@@ -29,4 +29,15 @@ test("private register escapes text and retains unavailable history",()=>{
   const s=initialTrial();present(s,"one","<script>&");admission(s,"one",true);
   const html=trialHTML(s,[]);assert.ok(html.includes("&lt;script&gt;&amp;"));assert.ok(!html.includes("<script>"));assert.ok(html.includes("unavailable"));
   assert.ok(DISPLAY_RECT.x+DISPLAY_RECT.width<=1&&DISPLAY_RECT.y+DISPLAY_RECT.height<=1);
+});
+
+test("reset clears all proceedings, display register and numbering but retains target",()=>{
+ const s=initialTrial();setTarget(s,5);present(s,"one","First");admission(s,"one",true);present(s,"two","Second");
+ const reset=resetTrialState(s);
+ assert.deepEqual(reset,{version:1,target:5,next:1,exhibits:[],events:[]});
+ assert.equal(s.exhibits.length,2);assert.ok(s.events.length>0);
+ assert.equal(summary(reset,["one","two"]).admitted,0);
+ assert.ok(trialHTML(reset,[]).includes("No exhibit actions recorded."));
+ assert.equal(present(reset,"two","Second").number,1);
+ assert.deepEqual(resetTrialState(null),initialTrial());
 });

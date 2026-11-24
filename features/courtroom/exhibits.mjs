@@ -3,7 +3,7 @@ import {disableContentActions} from "../../scripts/window-busy.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
 import {availableEvidence,openEvidenceManager,exclusive as evidenceOperation} from "../investigation/library.mjs";
 import {RECORD,PLACEMENT,safeImage,rectPixels,fitImage,placementDocs} from "../investigation/records.mjs";
-import {TRIAL,SCREEN,DISPLAY_RECT,initialTrial,trialState,present,admission,setTarget,summary,trialHTML,recordEvent} from "./trial-state.mjs";
+import {TRIAL,SCREEN,DISPLAY_RECT,initialTrial,trialState,resetTrialState,present,admission,setTarget,summary,trialHTML,recordEvent} from "./trial-state.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 const apps=new Map();
 function requireGM(){if(!game.user?.isGM)throw new Error("GM permission is required.");}
@@ -81,6 +81,14 @@ async function clear(sceneId){
     if(entry&&id){const state=trialState(entry.getFlag(MODULE_ID,TRIAL));recordEvent(state,"Display cleared",state.exhibits.find(e=>e.journalId===id));await saveRecord(entry,state);}
   });
 }
+async function resetTrial(sceneId){
+  return evidenceOperation(async()=>{
+    const scene=court(sceneId),entry=findRecord(scene);
+    if(entry)privateRecord(entry);
+    await clearDisplay(scene);
+    if(entry)await saveRecord(entry,resetTrialState(entry.getFlag(MODULE_ID,TRIAL)));
+  });
+}
 async function changeAdmission(sceneId,id,value){
   return evidenceOperation(async()=>{
     const scene=court(sceneId);
@@ -96,7 +104,7 @@ async function changeTarget(sceneId,value){
   });
 }
 class ExhibitDirector extends HandlebarsApplicationMixin(ApplicationV2){
-  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Exhibit Control",resizable:true},position:{width:555,height:700},actions:{present:ExhibitDirector.presentAction,clear:ExhibitDirector.clearAction,admit:ExhibitDirector.admitAction,unadmit:ExhibitDirector.unadmitAction,inspect:ExhibitDirector.inspectAction,record:ExhibitDirector.recordAction,target:ExhibitDirector.targetAction,library:ExhibitDirector.libraryAction,refresh:ExhibitDirector.refreshAction}};
+  static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Exhibit Control",resizable:true},position:{width:555,height:700},actions:{present:ExhibitDirector.presentAction,clear:ExhibitDirector.clearAction,admit:ExhibitDirector.admitAction,unadmit:ExhibitDirector.unadmitAction,inspect:ExhibitDirector.inspectAction,record:ExhibitDirector.recordAction,target:ExhibitDirector.targetAction,library:ExhibitDirector.libraryAction,refresh:ExhibitDirector.refreshAction,reset:ExhibitDirector.resetAction}};
   static PARTS={body:{template:ROOT+"templates/court-exhibits.hbs"}};
   constructor(sceneId){super({id:"gg-mimc-exhibits-"+sceneId});this.sceneId=sceneId;}
   _busy=false;_selected=null;_lighting=true;
@@ -126,6 +134,11 @@ class ExhibitDirector extends HandlebarsApplicationMixin(ApplicationV2){
   static async recordAction(){await this.run(async()=>{const j=await evidenceOperation(async()=>{const e=await ensureRecord(court(this.sceneId));await saveRecord(e,trialState(e.getFlag(MODULE_ID,TRIAL)));return e;});await j.sheet.render({force:true});});}
   static async targetAction(){await this.run(()=>changeTarget(this.sceneId,this.element.querySelector("[name=target]").value));}
   static async libraryAction(){await this.run(()=>openEvidenceManager());}
+  static async resetAction(){
+    requireGM();
+    if(!this.element.querySelector("[name=confirmReset]")?.checked){ui.notifications.warn("Check the confirmation box before resetting the trial.");return;}
+    await this.run(async()=>{await resetTrial(this.sceneId);ui.notifications.info("Trial reset. Proceedings, admissions and exhibit display cleared; admission target and published evidence retained.");});
+  }
   static async refreshAction(){requireGM();if(!this._busy)await this.render();}
   async _onClose(options){apps.delete(this.sceneId);await super._onClose(options);}
 }

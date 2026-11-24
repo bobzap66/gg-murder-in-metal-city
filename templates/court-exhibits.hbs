@@ -15,5 +15,11 @@
     <div class="gg-mimc-actions">{{#if available}}<button type="button" data-action="inspect" data-id="{{journalId}}">Inspect</button>{{#unless admitted}}<button type="button" data-action="admit" data-id="{{journalId}}">Admit</button>{{/unless}}{{/if}}{{#if admitted}}<button type="button" data-action="unadmit" data-id="{{journalId}}">Withdraw admission</button>{{/if}}</div></article>{{else}}<p>No exhibits presented yet.</p>{{/each}}
 </section>
 <div class="gg-mimc-actions"><button type="button" data-action="record"><i class="fa-solid fa-book-open"></i> GM Trial Record</button><button type="button" data-action="library">Evidence library</button><button type="button" data-action="refresh">Refresh</button></div>
+<section class="gg-mimc-cue-group gg-mimc-evidence-fields">
+  <h3>Reset trial</h3>
+  <p>Clear the proceedings log, exhibit register, admissions and displayed exhibit. Restart numbering at 1. Retain the admission target, published evidence and investigation board.</p>
+  <label class="gg-mimc-inline-check"><input type="checkbox" name="confirmReset"> I understand this permanently clears the trial history.</label>
+  <div class="gg-mimc-actions"><button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Reset trial</button></div>
+</section>
 <p class="gg-mimc-legal">Clearing the display does not withdraw admission. Withdrawing a publication in the shared library removes its managed tiles and journal pins; the historical record remains private. Players can open the published journal from the display pin or Journal sidebar. No verdict is automated.</p>
 </section>
