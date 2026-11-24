@@ -4,7 +4,7 @@ import {openCourtExhibits} from "./exhibits.mjs";
 import {openCourtRoster,openCourtJournal} from "./roster.mjs";
 import {PROFILES} from "./profiles.mjs";
 import {MODULE_ID,ROOT,matchingScenes} from "../../scripts/features.mjs";
-import {LIGHTS,GROUPS,cueDefinition,lightRole,missingLights,lightData,lightUpdates} from "./lighting.mjs";
+import {LIGHTS,GROUPS,cueDefinition,lightRole,missingLights,lightData,lightUpdates,toggledCue} from "./lighting.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 const directors=new Map();
 const busyScenes=new Set();
@@ -61,6 +61,12 @@ export async function applyCourtCue(sceneId,id){
     await scene.update(patch);
   });
 }
+export async function toggleCourtCue(sceneId,id){
+  const scene=resolveScene(sceneId);
+  await applyCourtCue(sceneId,toggledCue(scene.getFlag(MODULE_ID,"courtCue")??"reset",id));
+  const app=directors.get(sceneId);
+  if(app?.rendered&&!app._busy)await app.render();
+}
 export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
   static DEFAULT_OPTIONS={classes:["gg-mimc-window"],window:{title:"Machine Court — Director",resizable:true},position:{width:435,height:650},actions:{cue:CourtDirector.cueAction,install:CourtDirector.installAction,view:CourtDirector.viewAction,refresh:CourtDirector.refreshAction,roster:CourtDirector.rosterAction,profile:CourtDirector.profileAction,exhibits:CourtDirector.exhibitAction,cast:CourtDirector.castAction}};
   static PARTS={body:{template:ROOT+"templates/court-director.hbs"}};
@@ -84,7 +90,7 @@ export class CourtDirector extends HandlebarsApplicationMixin(ApplicationV2){
     try{await fn();}catch(err){console.error(MODULE_ID,err);ui.notifications.error(err.message??String(err));}
     finally{this._busy=false;restoreButtons();if(this.rendered)await this.render();}
   }
-  static async cueAction(event,target){await this.run(()=>applyCourtCue(this.sceneId,target.dataset.cue));}
+  static async cueAction(event,target){await this.run(()=>toggleCourtCue(this.sceneId,target.dataset.cue));}
   static async installAction(){await this.run(()=>exclusive(this.sceneId,async scene=>{const n=await installMissing(scene);ui.notifications.info(n?"Added "+n+" courtroom lights.":"All courtroom lights already exist.");}));}
   static async viewAction(){await this.run(()=>resolveScene(this.sceneId).view());}
   static async rosterAction(){await this.run(()=>openCourtRoster());}

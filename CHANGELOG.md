@@ -15,4 +15,5 @@
 - Versioned development manifest channel and automated publication after passing main builds; stable releases remain draft-only.
 - Fix native Foundry window close/menu controls remaining disabled after module operations; scope busy state to content actions and restore prior button state in every GM panel.
 - Install GM Macros creates seven reusable GM-only shortcuts in a dedicated Macro folder, skips existing tagged or equivalent manual macros, and preserves hotbar assignments.
+- Cast placement: direct movement/size nudges, adjustable step, numeric and mirror live updates, native tile dragging and lock controls; active lighting cue toggles to Normal / Reset.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

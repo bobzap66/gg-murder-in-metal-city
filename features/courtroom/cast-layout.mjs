@@ -45,3 +45,16 @@ export function castTileData(id,raw,d,w,h,levelId,elevation){
   const r=normalizeCast(id,raw);
   return {name:r.name,...castRect(r,d,w,h),levels:[levelId],elevation,sort:2000,rotation:0,hidden:false,locked:true,alpha:1,texture:{src:r.image,scaleX:r.mirror?-1:1,scaleY:1},flags:{[MODULE_ID]:{[CAST_FLAG]:id}}};
 }
+
+/** Adjust geometry only, retaining the original tile and its artwork. */
+export function adjustCastGeometry(id,tile,d,changes={}){
+  if(!tile)throw new Error("Place a character first.");
+  const base=stationForm(id,tile,d);
+  const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+  const next={...base};
+  for(const [key,min,max] of [["center",0,100],["baseline",0,100],["height",5,85]]){
+    if(changes[key]!==undefined)next[key]=percent(changes[key],min,max,key);
+    if(changes.delta?.[key]!==undefined)next[key]=clamp(next[key]+changes.delta[key],min,max);
+  }
+  return castRect(next,d,tile.width,tile.height);
+}

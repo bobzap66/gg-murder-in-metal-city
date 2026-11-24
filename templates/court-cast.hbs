@@ -17,6 +17,20 @@
       <label>Bottom baseline (%)<input type="number" name="baseline" min="0" max="100" step="0.1" value="{{form.baseline}}"></label>
       <label>Height (% of scene)<input type="number" name="height" min="5" max="85" step="0.1" value="{{form.height}}"></label>
     </div>
+    {{#if placed}}
+    <div class="gg-mimc-cast-adjust">
+      <div class="gg-mimc-nudge"><h3>Move character</h3><div class="gg-mimc-dpad">
+        <button type="button" class="up" data-action="nudge" data-axis="baseline" data-sign="-1" title="Move up" aria-label="Move up"><i class="fa-solid fa-arrow-up"></i></button>
+        <button type="button" class="left" data-action="nudge" data-axis="center" data-sign="-1" title="Move left" aria-label="Move left"><i class="fa-solid fa-arrow-left"></i></button>
+        <button type="button" class="down" data-action="nudge" data-axis="baseline" data-sign="1" title="Move down" aria-label="Move down"><i class="fa-solid fa-arrow-down"></i></button>
+        <button type="button" class="right" data-action="nudge" data-axis="center" data-sign="1" title="Move right" aria-label="Move right"><i class="fa-solid fa-arrow-right"></i></button>
+      </div></div>
+      <div><label>Step size<select name="step"><option value="0.5" {{#if fine}}selected{{/if}}>Fine (0.5%)</option><option value="1" {{#unless fine}}{{#unless coarse}}selected{{/unless}}{{/unless}}>Normal (1%)</option><option value="2" {{#if coarse}}selected{{/if}}>Coarse (2%)</option></select></label>
+      <div class="gg-mimc-actions"><button type="button" data-action="nudge" data-axis="height" data-sign="-1"><i class="fa-solid fa-minus"></i> Smaller</button><button type="button" data-action="nudge" data-axis="height" data-sign="1"><i class="fa-solid fa-plus"></i> Larger</button></div></div>
+    </div>
+    <div class="gg-mimc-actions"><button type="button" data-action="drag"><i class="fa-solid fa-arrows-up-down-left-right"></i> Unlock &amp; drag</button><button type="button" data-action="lock"><i class="fa-solid fa-lock"></i> Lock position</button><small data-drag-status>{{#if unlocked}}Unlocked — drag on Tiles layer{{else}}Locked{{/if}}</small></div>
+    <small>Movement, size and mirror save immediately. Drag with Foundry's Tiles layer, then lock position. Name and artwork still require Place / update.</small>
+    {{/if}}
     <label class="gg-mimc-inline-check"><input type="checkbox" name="mirror" {{#if form.mirror}}checked{{/if}}> Mirror horizontally</label>
     <label class="gg-mimc-inline-check"><input type="checkbox" name="lighting" {{#if lighting}}checked{{/if}}> Spotlight after placement</label>
     <div class="gg-mimc-actions"><button type="button" data-action="place"><i class="fa-solid fa-user-plus"></i> Place / update character</button><button type="button" data-action="defaults">Default position</button><button type="button" data-action="refresh">Refresh</button></div>

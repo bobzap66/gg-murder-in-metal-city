@@ -56,3 +56,9 @@ export function lightUpdates(documents,id){
   const known=new Set(LIGHTS.map(l=>l.id));
   return Array.from(documents).filter(d=>known.has(lightRole(d))).map(d=>({_id:d.id,hidden:!roles.has(lightRole(d))})).filter((u)=>Array.from(documents).find(d=>d.id===u._id)?.hidden!==u.hidden);
 }
+
+/** UI cue presses toggle; explicit apply operations remain idempotent. */
+export function toggledCue(current,requested){
+  cueDefinition(requested);
+  return requested===current?"reset":requested;
+}
