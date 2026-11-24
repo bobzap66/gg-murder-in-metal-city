@@ -1,4 +1,5 @@
-import {assetPaths,validateConfiguration,MAX_BYTES} from "./configuration-format.mjs";
+import {assetPaths,remapAssets,validateConfiguration,MAX_BYTES} from "./configuration-format.mjs";
+import {ROOT} from "./features.mjs";
 export const PACKAGE_LIMIT=80*1024*1024;
 const IMAGE_LIMIT=12*1024*1024;
 const MIME={png:"image/png",webp:"image/webp",jpg:"image/jpeg",jpeg:"image/jpeg"};
@@ -79,4 +80,70 @@ export async function uploadPackageAssets(pkg,existing={}){
     mapping[a.path]=result.path;
   }
   return mapping;
+}
+
+/** Store (no compression): PNG, JPEG and WebP are already compressed, and all
+ * supported Foundry clients can import stored ZIP entries without a codec. */
+function storedZip(entries){
+  const encoder=new TextEncoder(),parts=[],directory=[];let offset=0,dirSize=0;
+  for(const [name,data] of entries){
+    const n=encoder.encode(name),local=new Uint8Array(30+n.length),central=new Uint8Array(46+n.length);
+    const l=new DataView(local.buffer),c=new DataView(central.buffer),crc=crc32(data);
+    l.setUint32(0,0x04034b50,true);l.setUint16(4,20,true);l.setUint16(12,33,true);
+    l.setUint32(14,crc,true);l.setUint32(18,data.length,true);l.setUint32(22,data.length,true);l.setUint16(26,n.length,true);local.set(n,30);
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(14,33,true);
+    c.setUint32(16,crc,true);c.setUint32(20,data.length,true);c.setUint32(24,data.length,true);c.setUint16(28,n.length,true);c.setUint32(42,offset,true);central.set(n,46);
+    parts.push(local,data);directory.push(central);offset+=local.length+data.length;dirSize+=central.length;
+  }
+  const end=new Uint8Array(22),e=new DataView(end.buffer);
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,entries.length,true);e.setUint16(10,entries.length,true);e.setUint32(12,dirSize,true);e.setUint32(16,offset,true);
+  if(offset+dirSize+end.length>PACKAGE_LIMIT)throw Error("ZIP exceeds 80 MB including archive headers.");
+  return new Blob([...parts,...directory,end],{type:"application/zip"});
+}
+async function fetchImage(path){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
+  try{
+    const response=await fetch(path,{signal:controller.signal,credentials:"same-origin"});
+    if(!response.ok)throw Error("HTTP "+response.status);
+    const length=Number(response.headers.get("content-length"));
+    if(length>IMAGE_LIMIT)throw Error("Image exceeds 12 MB.");
+    if(!response.body)throw Error("Image response has no readable body.");
+    const reader=response.body.getReader(),chunks=[];let size=0;
+    try{
+      while(true){
+        const {done,value}=await reader.read();if(done)break;
+        size+=value.length;if(size>IMAGE_LIMIT){await reader.cancel();throw Error("Image exceeds 12 MB.");}
+        chunks.push(value);
+      }
+    }finally{reader.releaseLock();}
+    const bytes=new Uint8Array(size);let offset=0;
+    for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+    return bytes;
+  }finally{clearTimeout(timer);}
+}
+/** Bundle unique referenced custom images; retain module-supplied assets by path.
+ * No world writes. Fail rather than silently omit an inaccessible image. */
+export async function buildPackage(raw,catalog,{readAsset=fetchImage,onProgress=()=>{}}={}){
+  const data=validateConfiguration(raw,catalog);
+  const paths=assetPaths(data).filter(path=>!path.startsWith(ROOT+"assets/"));
+  if(paths.length>100)throw Error("ZIP supports at most 100 unique custom images.");
+  const entries=[],mapping=Object.create(null);let total=0;
+  for(const [i,path] of paths.entries()){
+    onProgress({done:i,total:paths.length,path});
+    try{
+      const bytes=await readAsset(path);
+      if(!(bytes instanceof Uint8Array)||!bytes.length||bytes.length>IMAGE_LIMIT)throw Error("Image is empty or exceeds 12 MB.");
+      const ext=["png","webp","jpg"].find(ext=>imageSignature(bytes,ext));
+      if(!ext)throw Error("Unsupported image. Use PNG, WebP or JPEG.");
+      total+=bytes.length;if(total>PACKAGE_LIMIT)throw Error("ZIP exceeds 80 MB.");
+      const name="assets/image-"+String(i+1).padStart(3,"0")+"."+ext;
+      mapping[path]=name;entries.push([name,bytes]);
+    }catch(err){throw Error("Cannot package artwork "+path+": "+(err.message??String(err))+". Check file access, format and size; no ZIP was generated.");}
+  }
+  const config=validateConfiguration(remapAssets(data,mapping),catalog);
+  const json=new TextEncoder().encode(JSON.stringify(config,null,2));
+  if(json.length>MAX_BYTES)throw Error("Configuration exceeds 8 MB.");
+  const blob=storedZip([["configuration.json",json],...entries]);
+  onProgress({done:paths.length,total:paths.length,path:null});
+  return {blob,count:entries.length,config};
 }

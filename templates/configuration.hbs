@@ -7,7 +7,12 @@
     <p>Setup: scenes, cast, lighting, case subject and chase requirements. Preparation: also private evidence drafts and court journal text/art references. Campaign state: also published snapshots, placements, exhibits and chase progress.</p>
     <div class="gg-mimc-config-checks">{{#each features}}<label><input type="checkbox" data-feature="{{id}}" {{#if selected}}checked{{/if}}> {{title}}</label>{{/each}}
     <label><input type="checkbox" name="macros" {{#if macros}}checked{{/if}}> Include installed standard GM shortcuts</label></div>
-    <div class="gg-mimc-actions"><button type="button" data-action="export"><i class="fa-solid fa-download"></i> Generate private JSON</button></div>
+    <div class="gg-mimc-actions"><button type="button" data-action="export"><i class="fa-solid fa-download"></i> Generate private JSON</button><button type="button" data-action="exportZIP"><i class="fa-solid fa-file-zipper"></i> Generate private ZIP</button></div>
+    <p data-export-status aria-live="polite">ZIP includes referenced custom PNG, JPEG and WebP images. Built-in module artwork remains a reference.</p>
+    {{#if zipName}}<div class="gg-mimc-display-state"><strong>{{zipName}}</strong><p>{{zipCount}} custom images · {{zipSize}} MB</p></div>
+    <div class="gg-mimc-actions"><button type="button" data-action="saveZIP"><i class="fa-solid fa-floppy-disk"></i> Save ZIP</button>{{#if canCopyZIP}}<button type="button" data-action="copyZIP">Copy ZIP data (Windows fallback)</button>{{/if}}</div>
+    <p>If Foundry desktop does not save the file, open the same world in a browser and generate/save the ZIP there.</p>
+    {{#if canCopyZIP}}<details><summary>Windows desktop clipboard fallback</summary><p>Copy the command below into PowerShell first (do not execute yet). Return here and click Copy ZIP data, then run the command in PowerShell without copying anything else. It saves the ZIP to your Desktop, replacing a file of the same name. Keep the clipboard contents private.</p><textarea rows="3" readonly spellcheck="false">{{zipCommand}}</textarea></details>{{/if}}{{/if}}
     {{#if exportName}}<div class="gg-mimc-display-state"><strong>{{exportName}}</strong><p>Save to a location you choose if supported, or copy the JSON into Notepad and save as this filename. Foundry desktop may not support browser downloads.</p></div>
     <div class="gg-mimc-actions"><button type="button" data-action="saveFile"><i class="fa-solid fa-floppy-disk"></i> Save file</button><button type="button" data-action="copyJSON"><i class="fa-solid fa-copy"></i> Copy JSON</button><button type="button" data-action="selectJSON">Select all JSON</button></div>
     <label>Private configuration output<textarea name="exportText" rows="7" readonly spellcheck="false">{{exportText}}</textarea></label>{{/if}}
@@ -20,7 +25,7 @@
     {{#if filename}}<p>Selected: <strong>{{filename}}</strong></p>{{/if}}
     {{#if packageCount}}<aside class="gg-mimc-notice">{{packageCount}} bundled images validated. They will be uploaded only when you apply the configuration. Uploaded files may be directly accessible by URL; keep asset links private.</aside>{{/if}}
     <label>Asset path replacements (JSON object; optional)<textarea name="mapping" rows="3">{{mapping}}</textarea></label>
-    <p>Upload your custom artwork to Forge first. Map old paths to new paths, e.g. {"worlds/local/art/npc.png":"your-forge-asset-path/npc.png"}. Included module assets retain their original paths.</p>
+    <p>For JSON imports, upload custom artwork to Forge first. ZIP imports can upload included images automatically. Map old paths to new paths if needed, e.g. {"worlds/local/art/npc.png":"your-forge-asset-path/npc.png"}. Included module assets retain their original paths.</p>
     <div class="gg-mimc-actions"><button type="button" data-action="preview">Validate &amp; preview</button></div>
     {{#if preview}}
     <div data-preview-status>Preview: {{preview.data.mode}} — {{preview.summary.scenes}} scenes, {{preview.summary.drafts}} drafts, {{preview.summary.published}} public snapshots, {{preview.summary.officials}} court journals, {{preview.summary.assets}} referenced assets.</div>

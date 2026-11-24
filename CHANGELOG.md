@@ -22,4 +22,5 @@
 - Desktop-friendly JSON export: named, selectable text, copy, explicit save/download with accurate notifications, and paste-to-import; generated contents remain in GM panel memory until closed.
 - Preparation ZIP imports: validated archive layout, CRC and size checks, raster image-only assets, explicit GM upload confirmation, native FilePicker uploads with automatic destination path mapping. JSON export remains unchanged.
 - Confirmed Reset trial action clears the exhibit display, register and proceedings log, restarts numbering and preserves the admission target and investigation evidence.
+- Private ZIP export packages unique referenced custom raster artwork, remaps asset paths, preserves JSON modes, validates archive limits and provides save/download and Windows clipboard fallback. Built-in module assets remain references.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

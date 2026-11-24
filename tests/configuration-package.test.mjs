@@ -1,7 +1,7 @@
 import {test} from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {crc32,parsePackage} from "../scripts/configuration-package.mjs";
+import {crc32,parsePackage,buildPackage} from "../scripts/configuration-package.mjs";
 import {FORMAT} from "../scripts/configuration-format.mjs";
 const catalog=JSON.parse(readFileSync("features/investigation/catalog.json","utf8"));
 const raw={format:FORMAT,schemaVersion:1,mode:"preparation",features:["investigation"],scenes:[{feature:"investigation",name:"Board",subject:{name:"Subject",image:"assets/subject.png"}}],drafts:[],officials:[],macros:true};
@@ -25,3 +25,36 @@ test("reject unexpected paths, duplicate names, unreferenced files and missing a
  for(const entries of [[config(),["../subject.png",png]],[config(),["assets/subject.png",png],["assets/subject.png",png]],[config(),["assets/extra.png",png]],[config()],[config(),["assets/subject.png",bytes("not an image")]]])await assert.rejects(parsePackage(zip(entries),catalog));
 });
 test("reject corrupted stored data",async()=>{const z=zip([config(),["assets/subject.png",png]]);z[50]^=1;await assert.rejects(parsePackage(z,catalog));});
+
+test("export round trip deduplicates images, preserves campaign progress and private/public separation",async()=>{
+ const path="https://assets.example.com/private/art.png",builtin="modules/gg-murder-in-metal-city/assets/investigation/drone-scan.webp";
+ const record={title:"Clue",templateId:"drone-scan",image:path,values:{field1:"private revision",field2:"",notes:""},gmNotes:"GM SECRET"};
+ const published={...record,values:{field1:"original snapshot",field2:"",notes:""}};
+ const source={...raw,mode:"campaign",scenes:[{...raw.scenes[0],subject:{name:"Subject",image:path},placements:[{slot:"evidence-01",key:"clue"}]}],drafts:[{key:"clue",record,published},{key:"builtin",record:{...record,image:builtin}}]};
+ const reads=[],progress=[];
+ const result=await buildPackage(source,catalog,{readAsset:async p=>{reads.push(p);return png;},onProgress:p=>progress.push(p.done)});
+ assert.deepEqual(reads,[path]);assert.equal(result.count,1);assert.deepEqual(progress,[0,1]);
+ const restored=await parsePackage(await result.blob.arrayBuffer(),catalog);
+ assert.deepEqual(restored.config,result.config);
+ assert.deepEqual(restored.assets[0].bytes,png);
+ assert.equal(restored.config.scenes[0].subject.image,restored.config.drafts[0].record.image);
+ assert.equal(restored.config.drafts[0].published.image,restored.config.drafts[0].record.image);
+ assert.equal(restored.config.drafts[1].record.image,builtin);
+ assert.equal(restored.config.drafts[0].record.gmNotes,"GM SECRET");
+ assert.equal(restored.config.drafts[0].published.gmNotes,undefined);
+ assert.equal(restored.config.drafts[0].published.values.field1,"original snapshot");
+ assert.equal(restored.config.scenes[0].placements[0].key,"clue");
+ assert.equal(source.drafts[0].record.image,path);
+});
+test("export identifies type from bytes and supports an archive without custom artwork",async()=>{
+ const webp=new Uint8Array(16);webp.set(bytes("RIFF"),0);webp.set(bytes("WEBP"),8);
+ const result=await buildPackage(raw,catalog,{readAsset:async()=>webp});
+ const parsed=await parsePackage(await result.blob.arrayBuffer(),catalog);
+ assert.equal(parsed.assets[0].path,"assets/image-001.webp");
+ const empty={...raw,scenes:[]};
+ const zero=await buildPackage(empty,catalog,{readAsset:async()=>{throw Error("unexpected fetch");}});
+ assert.equal((await parsePackage(await zero.blob.arrayBuffer(),catalog)).assets.length,0);
+});
+test("export fails closed for inaccessible, unsupported and oversized custom images",async()=>{
+ for(const readAsset of [async()=>{throw Error("CORS");},async()=>bytes("HTML"),async()=>new Uint8Array(12*1024*1024+1)])await assert.rejects(buildPackage(raw,catalog,{readAsset}),/Cannot package artwork/);
+});
