@@ -87,3 +87,5 @@
 .gg-mimc-config .gg-mimc-config-checks input{width:auto;flex:none}
 .gg-mimc-config input[type=file]{height:auto;min-height:32px}
 .gg-mimc-config p{overflow-wrap:anywhere}
+
+.gg-mimc-config textarea[name=exportText],.gg-mimc-config textarea[name=pasted]{font-family:monospace;white-space:pre;overflow:auto;font-size:.78rem;user-select:text}

@@ -19,4 +19,5 @@
 - Explicit v14 top-left tile anchors for evidence, subjects, cast, exhibits and chase overlays. Repair board alignment realigns existing managed artwork and shrinks journal pins without changing published journals; native image pickers in evidence editor.
 - Portable versioned JSON configuration export, validated preview, image path remapping and GM-only merge/import for scene setup, court, investigation and chase; explicit opt-in for published campaign state.
 - Dedicated square Cast & Witnesses shortcut icon; GM-ready migration updates only module-installed shortcuts still using the original desk overlay icon.
+- Desktop-friendly JSON export: named, selectable text, copy, explicit save/download with accurate notifications, and paste-to-import; generated contents remain in GM panel memory until closed.
 - Live Foundry/Forge verification and remaining interactive feature controls remain pending.

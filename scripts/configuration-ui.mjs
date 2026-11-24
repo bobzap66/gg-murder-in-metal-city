@@ -5,19 +5,19 @@ import {disableContentActions} from "./window-busy.mjs";
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 let app;
 function requireGM(){if(!game.user?.isGM)throw Error("GM permission is required.");}
-function download(data){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+function download(text,filename){
+  const blob=new Blob([text],{type:"application/json"});
   const url=URL.createObjectURL(blob),link=document.createElement("a");
-  link.href=url;link.download="gg-mimc-private-"+data.mode+"-"+new Date().toISOString().slice(0,10)+".json";
-  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  link.href=url;link.download=filename;
+  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
 }
 class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2){
-  static DEFAULT_OPTIONS={id:"gg-mimc-configuration",classes:["gg-mimc-window"],window:{title:"Greene Gaming — Portable Configuration",resizable:true},position:{width:760,height:720},actions:{export:ConfigurationApp.exportAction,preview:ConfigurationApp.previewAction,apply:ConfigurationApp.applyAction}};
+  static DEFAULT_OPTIONS={id:"gg-mimc-configuration",classes:["gg-mimc-window"],window:{title:"Greene Gaming — Portable Configuration",resizable:true},position:{width:760,height:720},actions:{export:ConfigurationApp.exportAction,preview:ConfigurationApp.previewAction,apply:ConfigurationApp.applyAction,saveFile:ConfigurationApp.saveFileAction,copyJSON:ConfigurationApp.copyAction,selectJSON:ConfigurationApp.selectAction,loadPasted:ConfigurationApp.pasteAction}};
   static PARTS={body:{template:ROOT+"templates/configuration.hbs"}};
-  _busy=false;_raw=null;_preview=null;_filename="";_mapping="{}";_log=[];_mode="preparation";_features=new Set(FEATURES.map(f=>f.id));_macros=true;_replace=false;_progress=false;
+  _busy=false;_exportText="";_exportName="";_raw=null;_preview=null;_filename="";_mapping="{}";_log=[];_mode="preparation";_features=new Set(FEATURES.map(f=>f.id));_macros=true;_replace=false;_progress=false;
   _canRender(options){return game.user?.isGM&&super._canRender(options);}
   async _prepareContext(options){
-    requireGM();return {...await super._prepareContext(options),features:FEATURES.map(f=>({...f,selected:this._features.has(f.id)})),modes:[{id:"setup",name:"Setup and configuration"},{id:"preparation",name:"Adventure preparation"},{id:"campaign",name:"Campaign state"}].map(m=>({...m,selected:m.id===this._mode})),macros:this._macros,filename:this._filename,mapping:this._mapping,preview:this._preview,canApply:!!this._preview&&!this._preview.missing.length,campaign:this._preview?.data.mode==="campaign",replace:this._replace,progress:this._progress,log:this._log};
+    requireGM();return {...await super._prepareContext(options),features:FEATURES.map(f=>({...f,selected:this._features.has(f.id)})),modes:[{id:"setup",name:"Setup and configuration"},{id:"preparation",name:"Adventure preparation"},{id:"campaign",name:"Campaign state"}].map(m=>({...m,selected:m.id===this._mode})),macros:this._macros,exportText:this._exportText,exportName:this._exportName,filename:this._filename,mapping:this._mapping,preview:this._preview,canApply:!!this._preview&&!this._preview.missing.length,campaign:this._preview?.data.mode==="campaign",replace:this._replace,progress:this._progress,log:this._log};
   }
   field(name){return this.element.querySelector('[name="'+name+'"]');}
   invalidate(){this._preview=null;this._progress=false;this._log=[];if(this.rendered)this.render();}
@@ -47,7 +47,45 @@ class ConfigurationApp extends HandlebarsApplicationMixin(ApplicationV2){
     try{await fn();}catch(e){console.error(e);ui.notifications.error(e.message??String(e));}
     finally{this._busy=false;restore();if(this.rendered)await this.render();}
   }
-  static async exportAction(){await this.run(async()=>{download(await exportConfiguration({mode:this._mode,features:[...this._features],macros:this._macros}));ui.notifications.info("Private configuration JSON exported.");});}
+  static async exportAction(){await this.run(async()=>{
+    this._exportText="";this._exportName="";
+    const data=await exportConfiguration({mode:this._mode,features:[...this._features],macros:this._macros});
+    this._exportText=JSON.stringify(data,null,2);
+    this._exportName="gg-mimc-private-"+data.mode+"-"+new Date().toISOString().slice(0,10)+".json";
+    ui.notifications.info("JSON prepared: "+this._exportName+". Choose Save file or Copy JSON below.");
+  });}
+  static async saveFileAction(){
+    requireGM();if(this._busy||!this._exportText)return;
+    // Save picker needs a direct user gesture. Electron builds may not expose it.
+    if(typeof globalThis.showSaveFilePicker==="function"){
+      try{
+        const handle=await globalThis.showSaveFilePicker({suggestedName:this._exportName,types:[{description:"JSON configuration",accept:{"application/json":[".json"]}}]});
+        const writer=await handle.createWritable();await writer.write(this._exportText);await writer.close();
+        ui.notifications.info("Saved "+handle.name+" to your selected location.");return;
+      }catch(e){if(e.name==="AbortError")return;ui.notifications.warn("Save dialog unavailable. Use Copy JSON or try a browser download.");}
+    }
+    download(this._exportText,this._exportName);
+    ui.notifications.info("Requested download: "+this._exportName+". If no file appears, copy the JSON and save it with a text editor.");
+  }
+  static selectAction(){requireGM();if(this._busy)return;const field=this.field("exportText");field?.focus();field?.select();}
+  static async copyAction(){
+    requireGM();if(this._busy||!this._exportText)return;
+    try{if(!navigator.clipboard?.writeText)throw Error("Clipboard API unavailable");await navigator.clipboard.writeText(this._exportText);ui.notifications.info("Private JSON copied. Paste into a text editor or the destination import panel.");}
+    catch(e){ConfigurationApp.selectAction.call(this);ui.notifications.warn("JSON selected. Press Ctrl+C to copy manually.");}
+  }
+  static async pasteAction(){
+    const value=this.field("pasted")?.value??"";
+    await this.run(async()=>{
+      this._raw=null;this._filename="";this._preview=null;this._progress=false;this._log=[];
+      if(new Blob([value]).size>MAX_BYTES)throw Error("Configuration exceeds 8 MB.");
+      this._raw=JSON.parse(value);this._filename="Pasted JSON";
+      ui.notifications.info("Pasted JSON loaded. Validate & preview before applying.");
+    });
+  }
+  async _onClose(options){
+    this._exportText="";this._exportName="";this._raw=null;this._preview=null;this._filename="";this._mapping="{}";this._log=[];this._progress=false;
+    await super._onClose(options);
+  }
   static async previewAction(){await this.run(async()=>{if(!this._raw)throw Error("Choose a configuration JSON file first.");this._preview=null;this._progress=false;this._preview=await previewConfiguration(this._raw,JSON.parse(this._mapping||"{}"));});}
   static async applyAction(){await this.run(async()=>{
     if(!this._preview||this._preview.missing.length)throw Error("Preview and resolve missing assets first.");

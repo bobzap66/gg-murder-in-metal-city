@@ -3,10 +3,10 @@
 Prepare locally, then transfer private JSON to the destination Foundry v14 world.
 
 1. Open Adventure Manager → Configuration Import / Export. Select features and mode.
-2. Export private JSON. Keep it private; it can contain adventure spoilers and GM notes.
+2. Generate private JSON. The panel shows the filename and contents. Save file uses a save picker where supported, otherwise requests a browser download (the desktop app may not save it). Copy JSON or Select all JSON + Ctrl+C always provides a manual alternative: paste into Notepad, Save As, choose All files and the displayed .json filename. You can also paste directly into the destination configuration panel and click Load pasted JSON. Closing the panel clears the generated text and loaded data. Keep it private; it can contain adventure spoilers and GM notes.
 3. Upload your custom images to Forge using its normal asset tools. The module's own asset paths remain unchanged.
 4. Enable the same or newer development version on the destination. Back up the world first.
-5. Choose the JSON, supply any exact old-path → new-path replacements in a JSON object, then Validate & preview. Missing referenced images block apply.
+5. Choose the JSON file or load pasted JSON, supply any exact old-path → new-path replacements in a JSON object, then Validate & preview. Missing referenced images block apply.
 6. Merge missing managed objects by default, or explicitly allow imported settings to update existing managed objects. Existing published evidence with a different snapshot is never overwritten. Campaign progress and publication require a separate opt-in. Refresh open feature panels after importing.
 
 Modes: setup (scene import, initial view where available, cast, managed light geometry and core light settings, ambient baseline, trial target, subject, chase requirements, standard macro installation); preparation (also private evidence records and court text/image journals); campaign (also public snapshots, current board placements, trial exhibits/history and chase progress). Preparation never publishes evidence. Campaign imports without progress opt-in remain private. The original private draft and the public snapshot are separate data. Journal links are remapped to destination documents; historical withdrawn exhibits stay unavailable.

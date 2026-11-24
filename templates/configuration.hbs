@@ -7,11 +7,16 @@
     <p>Setup: scenes, cast, lighting, case subject and chase requirements. Preparation: also private evidence drafts and court journal text/art references. Campaign state: also published snapshots, placements, exhibits and chase progress.</p>
     <div class="gg-mimc-config-checks">{{#each features}}<label><input type="checkbox" data-feature="{{id}}" {{#if selected}}checked{{/if}}> {{title}}</label>{{/each}}
     <label><input type="checkbox" name="macros" {{#if macros}}checked{{/if}}> Include installed standard GM shortcuts</label></div>
-    <div class="gg-mimc-actions"><button type="button" data-action="export"><i class="fa-solid fa-download"></i> Export private JSON</button></div>
+    <div class="gg-mimc-actions"><button type="button" data-action="export"><i class="fa-solid fa-download"></i> Generate private JSON</button></div>
+    {{#if exportName}}<div class="gg-mimc-display-state"><strong>{{exportName}}</strong><p>Save to a location you choose if supported, or copy the JSON into Notepad and save as this filename. Foundry desktop may not support browser downloads.</p></div>
+    <div class="gg-mimc-actions"><button type="button" data-action="saveFile"><i class="fa-solid fa-floppy-disk"></i> Save file</button><button type="button" data-action="copyJSON"><i class="fa-solid fa-copy"></i> Copy JSON</button><button type="button" data-action="selectJSON">Select all JSON</button></div>
+    <label>Private configuration output<textarea name="exportText" rows="7" readonly spellcheck="false">{{exportText}}</textarea></label>{{/if}}
   </section>
   <section class="gg-mimc-cue-group gg-mimc-evidence-fields">
     <h2>Import configuration</h2>
     <label>Configuration file<input type="file" accept=".json,application/json" name="file"></label>
+    <label>Or paste configuration JSON<textarea name="pasted" rows="4" spellcheck="false" placeholder="Paste exported private JSON here"></textarea></label>
+    <div class="gg-mimc-actions"><button type="button" data-action="loadPasted">Load pasted JSON</button></div>
     {{#if filename}}<p>Selected: <strong>{{filename}}</strong></p>{{/if}}
     <label>Asset path replacements (JSON object; optional)<textarea name="mapping" rows="3">{{mapping}}</textarea></label>
     <p>Upload your custom artwork to Forge first. Map old paths to new paths, e.g. {"worlds/local/art/npc.png":"your-forge-asset-path/npc.png"}. Included module assets retain their original paths.</p>
