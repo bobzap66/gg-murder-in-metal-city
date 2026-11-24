@@ -1,4 +1,4 @@
-import {installGMMacros} from "./gm-macros.mjs";
+import {installGMMacros,repairGMShortcutIcons} from "./gm-macros.mjs";
 import {openChaseDirector} from "../features/chase/director.mjs";
 import {openCourtCast} from "../features/courtroom/cast.mjs";
 import {openCourtExhibits} from "../features/courtroom/exhibits.mjs";
@@ -22,6 +22,7 @@ Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
     installGMMacros,
+    repairGMShortcutIcons,
     openConfiguration:async()=>{const {openConfiguration}=await import('./configuration-ui.mjs');return openConfiguration();},
     openEvidenceManager,
     openChaseDirector,

@@ -4,7 +4,7 @@ export const MACRO_FOLDER="Greene Gaming — GM Shortcuts";
 export const SHORTCUTS=Object.freeze([
   ["manager","Adventure Manager","openManager","assets/courtroom/courtroom-background.webp"],
   ["court","Courtroom Director","openCourtDirector","assets/courtroom/courtroom-background.webp"],
-  ["cast","Cast & Witnesses","openCourtCast","assets/courtroom/counsel-desk-foreground.webp"],
+  ["cast","Cast & Witnesses","openCourtCast","assets/courtroom/cast-witnesses-icon.webp"],
   ["exhibits","Courtroom Exhibit Control","openCourtExhibits","assets/investigation/recovered-datapad.webp"],
   ["roster","Court Officials","openCourtRoster","assets/courtroom/equilibrium-prime-portrait.webp"],
   ["evidence","Investigation Tracker","openEvidenceManager","assets/investigation/evidence-board.webp"],
@@ -46,4 +46,15 @@ export async function installGMMacros(){
     if(!missing.length)return [];
     return await foundry.documents.Macro.createDocuments(missing.map(s=>shortcutData(s,folder.id,game.user.id,{none:CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,owner:CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER})));
   }finally{installing=false;}
+}
+
+/** Upgrade only the old shipped icon on module-installed shortcuts. */
+export function legacyIconUpdates(macros){
+  return Array.from(macros).filter(m=>m.getFlag?.(MODULE_ID,MACRO_FLAG)==="cast"&&m.img===ROOT+"assets/courtroom/counsel-desk-foreground.webp").map(m=>({_id:m.id,img:ROOT+"assets/courtroom/cast-witnesses-icon.webp"}));
+}
+export async function repairGMShortcutIcons(){
+  if(!game.user?.isGM)throw new Error("GM permission is required.");
+  const updates=legacyIconUpdates(game.macros.contents);
+  if(updates.length)await foundry.documents.Macro.updateDocuments(updates);
+  return updates.length;
 }

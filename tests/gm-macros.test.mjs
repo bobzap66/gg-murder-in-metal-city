@@ -2,7 +2,7 @@ import {test} from "node:test";
 import assert from "node:assert/strict";
 import {existsSync,readFileSync} from "node:fs";
 import {MODULE_ID,ROOT} from "../scripts/features.mjs";
-import {MACRO_FLAG,SHORTCUTS,shortcutCommand,findShortcut,missingShortcuts,shortcutData,installGMMacros} from "../scripts/gm-macros.mjs";
+import {MACRO_FLAG,SHORTCUTS,shortcutCommand,findShortcut,missingShortcuts,shortcutData,installGMMacros,legacyIconUpdates} from "../scripts/gm-macros.mjs";
 const doc=(id,extras={})=>({getFlag:(scope,key)=>scope===MODULE_ID&&key===MACRO_FLAG?id:undefined,...extras});
 test("seven distinct GM shortcuts have valid icons and API methods",()=>{
   assert.equal(SHORTCUTS.length,7);assert.equal(new Set(SHORTCUTS.map(s=>s.id)).size,7);
@@ -35,4 +35,11 @@ test("GM installer creates missing macros only, uses one folder, denies player a
     macros.pop();assert.equal((await installGMMacros()).length,1);assert.equal(folders.length,1);
     game.user.isGM=false;await assert.rejects(installGMMacros(),/GM permission/);
   }finally{delete globalThis.game;delete globalThis.CONST;delete globalThis.foundry;}
+});
+
+test("upgrade only the old module-installed cast icon, preserving custom icons and commands",()=>{
+  const old=ROOT+"assets/courtroom/counsel-desk-foreground.webp";
+  const entries=[doc("cast",{id:"old",img:old,command:"custom"}),doc("cast",{id:"custom",img:"custom.webp"}),doc(undefined,{id:"manual",img:old}),doc("court",{id:"other",img:old})];
+  assert.deepEqual(legacyIconUpdates(entries),[{_id:"old",img:ROOT+"assets/courtroom/cast-witnesses-icon.webp"}]);
+  assert.equal(entries[0].command,"custom");
 });
