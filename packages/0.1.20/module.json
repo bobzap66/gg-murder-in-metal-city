@@ -1,0 +1,28 @@
+{
+  "id": "gg-murder-in-metal-city",
+  "title": "Greene Gaming: Murder in Metal City Add-Ons (Development)",
+  "description": "TEST BUILD — not live-tested. Unofficial cinematic scenes and investigation tools by Greene Gaming. Development build with GM dashboard and base scene imports.",
+  "version": "0.1.20",
+  "authors": [
+    {
+      "name": "Greene Gaming",
+      "url": "https://greene-gaming.com"
+    }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "maximum": "14"
+  },
+  "url": "https://github.com/bobzap66/gg-murder-in-metal-city",
+  "manifest": "https://raw.githubusercontent.com/bobzap66/gg-murder-in-metal-city/dev-release/module.json",
+  "download": "https://raw.githubusercontent.com/bobzap66/gg-murder-in-metal-city/dev-release/packages/0.1.20/module.zip",
+  "readme": "https://github.com/bobzap66/gg-murder-in-metal-city#readme",
+  "bugs": "https://github.com/bobzap66/gg-murder-in-metal-city/issues",
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/dashboard.css",
+    "features/investigation/card.css"
+  ]
+}
