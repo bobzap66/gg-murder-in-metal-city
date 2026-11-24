@@ -1,3 +1,4 @@
+import {openChaseDirector} from "../features/chase/director.mjs";
 import {openCourtCast} from "../features/courtroom/cast.mjs";
 import {openCourtExhibits} from "../features/courtroom/exhibits.mjs";
 import {openEvidenceManager} from "../features/investigation/library.mjs";
@@ -20,6 +21,7 @@ Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
     openEvidenceManager,
+    openChaseDirector,
     openCourtDirector,
     openCourtExhibits,
     openCourtCast,

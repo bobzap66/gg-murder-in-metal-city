@@ -1,0 +1,20 @@
+<section class="gg-mimc-manager gg-mimc-chase">
+<header class="gg-mimc-hero"><div><div class="gg-mimc-eyebrow">CHASE DIRECTOR</div><h1>{{sceneName}}</h1><p>Manual chase tracking. No rules, checks or outcomes are imposed.</p></div><span class="gg-mimc-version">Round {{state.round}}</span></header>
+{{#unless initialized}}<aside class="gg-mimc-notice">Initialize overlays before showing the scene to players. The base art contains all eight obstacles.</aside>{{/unless}}
+<div class="gg-mimc-actions"><button type="button" data-action="repair"><i class="fa-solid fa-wrench"></i> Initialize / repair overlays</button><button type="button" data-action="view"><i class="fa-solid fa-eye"></i> View chase</button><button type="button" data-action="round" data-delta="-1">Previous round</button><button type="button" data-action="round" data-delta="1">Next round</button></div>
+<div class="gg-mimc-chase-runners">
+  <article class="gg-mimc-record"><h2>Party · {{partyName}}</h2><div class="gg-mimc-actions"><button type="button" data-action="move" data-side="party" data-delta="-1">Back</button><button type="button" data-action="move" data-side="party" data-delta="1">Advance</button></div></article>
+  <article class="gg-mimc-record"><h2>Drone · {{droneName}}</h2><div class="gg-mimc-actions"><button type="button" data-action="move" data-side="drone" data-delta="-1">Back</button><button type="button" data-action="move" data-side="drone" data-delta="1">Advance</button></div></article>
+</div>
+<section class="gg-mimc-cue-group"><h3>Obstacle progress</h3><p>Set required points from your adventure and save before using other controls. Blank means no requirement configured. Reaching a target does not advance either side automatically.</p>
+<div class="gg-mimc-chase-rows">
+{{#each rows}}<article class="gg-mimc-record gg-mimc-chase-row {{#if party}}is-selected{{/if}}">
+  <div><strong>{{number}}. {{title}}</strong><small>{{#if party}}Party here · {{/if}}{{#if drone}}Drone here · {{/if}}{{#if revealed}}Revealed{{else}}Covered{{/if}}{{#if met}} · Target reached{{/if}}</small></div>
+  <label>Required CP<input type="number" data-required min="1" max="999" step="1" value="{{required}}" placeholder="—"></label>
+  <div class="gg-mimc-chase-points"><strong>{{points}} CP</strong><div class="gg-mimc-actions"><button type="button" data-action="points" data-index="{{index}}" data-delta="-1" aria-label="Subtract one point">−1</button><button type="button" data-action="points" data-index="{{index}}" data-delta="1" aria-label="Add one point">+1</button><button type="button" data-action="points" data-index="{{index}}" data-delta="2">+2</button></div></div>
+  <div class="gg-mimc-actions"><button type="button" data-action="reveal" data-index="{{index}}">{{#if revealed}}Cover{{else}}Reveal{{/if}}</button></div>
+</article>{{/each}}</div>
+<div class="gg-mimc-actions"><button type="button" data-action="requirements">Save requirements</button><button type="button" data-action="revealAll" data-value="yes">Reveal all</button><button type="button" data-action="revealAll" data-value="no">Cover all</button><button type="button" data-action="covers">{{#if state.covers}}Disable covers{{else}}Enable covers{{/if}}</button></div></section>
+<section class="gg-mimc-cue-group"><h3>Reset progress</h3><label class="gg-mimc-inline-check"><input type="checkbox" name="confirmReset"> Confirm reset (retains point requirements)</label><div class="gg-mimc-actions"><button type="button" data-action="reset">Reset chase</button></div></section>
+<p class="gg-mimc-legal">All chase progress and requirements are public scene data. Covers are a presentation effect, not spoiler protection. Only managed overlays are changed. No player navigation is automatic.</p>
+</section>

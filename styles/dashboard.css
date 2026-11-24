@@ -62,3 +62,12 @@
 .gg-mimc-cast .gg-mimc-inline-check{display:flex;flex-direction:row;align-items:center;gap:8px}
 .gg-mimc-cast .gg-mimc-inline-check input{width:auto}
 .gg-mimc-cast file-picker{width:100%;min-width:0}
+
+.gg-mimc-chase-runners{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gg-mimc-chase-runners .gg-mimc-record{margin:0}
+.gg-mimc-chase-row{display:grid;grid-template-columns:minmax(135px,1.6fr) minmax(70px,.7fr) minmax(120px,1.2fr) auto;align-items:center;gap:8px}
+.gg-mimc-chase-row>div:first-child,.gg-mimc-chase-row label,.gg-mimc-chase-points{display:flex;flex-direction:column;gap:4px}
+.gg-mimc-chase-row input{width:100%;min-width:0;color:#eafaff;background:#081a29;border:1px solid #395b69;border-radius:4px}
+.gg-mimc-chase-row label{font-size:.8rem;color:#bce4ed}
+.gg-mimc-chase .gg-mimc-inline-check{display:flex;align-items:center;gap:6px;margin:6px 0}
+@container (max-width:570px){.gg-mimc-chase-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
