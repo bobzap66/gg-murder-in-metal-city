@@ -1,3 +1,4 @@
+import {installGMMacros,missingShortcuts,SHORTCUTS} from "./gm-macros.mjs";
 import {disableContentActions} from "./window-busy.mjs";
 import {openChaseDirector} from "../features/chase/director.mjs";
 import {openEvidenceManager} from "../features/investigation/library.mjs";
@@ -78,7 +79,8 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
       courtDirector:Dashboard.courtAction,
       courtRoster:Dashboard.rosterAction,
       evidenceManager:Dashboard.evidenceAction,
-      chaseDirector:Dashboard.chaseAction
+      chaseDirector:Dashboard.chaseAction,
+      installMacros:Dashboard.macroAction
     }
   };
   static PARTS={body:{template:ROOT+"templates/dashboard.hbs"}};
@@ -91,7 +93,8 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
       const scenes=matchingScenes(game.scenes.contents,f.id);
       return {...f,courtroom:f.id==="courtroom",investigation:f.id==="investigation",chase:f.id==="chase",image:ROOT+f.image,installed:scenes.length>0,scenes:scenes.map(s=>({id:s.id,name:s.name})),multiple:scenes.length>1};
     });
-    return {...await super._prepareContext(options),features,version:game.modules.get(MODULE_ID)?.version??"development",busy:this._busy};
+    const missingMacros=missingShortcuts(game.macros.contents).length;
+    return {...await super._prepareContext(options),features,missingMacros,totalMacros:SHORTCUTS.length,version:game.modules.get(MODULE_ID)?.version??"development",busy:this._busy};
   }
   async run(action) {
     requireGM();
@@ -119,6 +122,7 @@ export class Dashboard extends HandlebarsApplicationMixin(ApplicationV2) {
   static async rosterAction(){await this.run(()=>openCourtRoster());}
   static async evidenceAction(event,target){await this.run(()=>openEvidenceManager(target.dataset.scene));}
   static async chaseAction(event,target){await this.run(()=>openChaseDirector(target.dataset.scene));}
+  static async macroAction(){await this.run(async()=>{const macros=await installGMMacros();ui.notifications.info(macros.length?"Installed "+macros.length+" GM shortcuts. Open the Macro Directory and drag them to your hotbar.":"All GM shortcuts already exist.");});}
   static async refreshAction(){requireGM();await this.render();}
   static async libraryAction(){
     await this.run(async()=>{

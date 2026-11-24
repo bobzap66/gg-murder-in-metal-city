@@ -1,3 +1,4 @@
+import {installGMMacros} from "./gm-macros.mjs";
 import {openChaseDirector} from "../features/chase/director.mjs";
 import {openCourtCast} from "../features/courtroom/cast.mjs";
 import {openCourtExhibits} from "../features/courtroom/exhibits.mjs";
@@ -20,6 +21,7 @@ Hooks.once("init",()=>{
 Hooks.once("ready",()=>{
   const module=game.modules.get(MODULE_ID);
   module.api=Object.freeze({
+    installGMMacros,
     openEvidenceManager,
     openChaseDirector,
     openCourtDirector,
